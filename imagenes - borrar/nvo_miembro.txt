@@ -1,0 +1,356 @@
+<!-- templates/nvo_miembro.html -->
+{% extends 'base.html' %}
+
+{% block titulo %}Nuevo Miembro{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block encabezado %}
+Crear Nuevo Miembro 🧑‍🤝‍🧑
+{% endblock %}
+
+{% block contenido %}
+<form id="form-funcion" method="POST" action="{{url_for('miembros.guardar_miembro')}}"
+    class="formulario">
+  <label for="num_grupo">Nº de Grupo:</label><br />
+
+  {% if current_user.super_admin %}
+  <input type="text" name="num_grupo" id="num_grupo" required value="{{request.form.num_grupo}}"
+    oninput="buscarNombreGrupo(this.value)" /><br /><br />
+  <label for="nombre_grupo">Nombre del Grupo:</label><br />
+  <!-- Campo oculto que permite guardar el nombre del grupo para no borrarlo si faya la validacion-->
+  <input type="hidden" name="nombre_grupo" id="hidden_nombre_grupo"
+    value="{{ request.form.nombre_grupo or nombre_grupo }}">
+
+  <input type="text" id="nombre_grupo" disabled value="{{ request.form.nombre_grupo or nombre_grupo }}">
+  {% else %}
+  <!-- Número de grupo -->
+  <input type="text" value="{{ contexto.num_grupo }}" disabled />
+  <input type="hidden" name="num_grupo" value="{{ request.form.num_grupo or num_grupo }}" /><br /><br />
+
+  <!-- Nombre del grupo -->
+  <label>Nombre del Grupo:</label><br />
+  <input type="text" value="{{ contexto.nombre_grupo }}" disabled />
+  <input type="hidden" name="nombre_grupo" value="{{ request.form.nombre_grupo or nombre_grupo }}" /><br /><br />
+  {% endif %}
+
+  <!-- ░▒▓ Campo para el dni del miembro ▓▒░ -->
+  <label for="dni_miembro">D.N.I.:</label><br />
+  <input type="text" id="dni_miembro" name="dni_miembro" pattern="\d{7,8}" maxlength="8" required
+    value="{{request.form.dni_miembro}}" class="{% if campo == 'dni_miembro' %}error{% endif %}"/><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'dni_miembro' %}
+    <p class="error-mensaje">⚠ El D.N.I. ingresado es inválido o demasiado largo.</p>
+  {% endif %}<br /><br />
+
+  <!-- ░▒▓ Campo para el Apellido del miembro ▓▒░ -->
+  <label for="apellido_miembro">Apellido:</label><br />
+  <input type="text" id="apellido_miembro" name="apellido_miembro" required
+    value="{{request.form.apellido_miembro}}" class="{% if campo == 'apellido_miembro' %}error{% endif %}"/><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'apellido_miembro' %}
+    <p class="error-mensaje">⚠ El nombre ingresado es inválido o demasiado largo.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para el nombre del miembro ▓▒░ -->
+  <label for="nombre_miembro">Nombres:</label><br />
+  <input type="text" id="nombre_miembro" name="nombre_miembro" required
+    value="{{request.form.nombre_miembro}}" class="{% if campo == 'nombre_miembro' %}error{% endif %}"/><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'nombre_miembro' %}
+    <p class="error-mensaje">⚠ El nombre ingresado es inválido o demasiado largo.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para el sexo del miembro ▓▒░ -->
+  <label for="sexo_miembro">Sexo:</label><br />
+  <select id="sexo_miembro" name="sexo_miembro" required class="{% if campo == 'sexo_miembro' %}error{% endif %}">
+    <option value="" selected></option>
+    <option value="M">Masculino</option>
+    <option value="V">Femenino</option>
+    <option value="X">No Binario</option>
+    <option value="Otro">Otro</option>
+  </select>
+    <br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'sexo_miembro' %}
+    <p class="error-mensaje">⚠ El nombre ingresado es inválido o demasiado largo.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para la fecha de nacimiento del miembro ▓▒░ -->
+  <label for="fecha_nac_miembro">Fecha de Nacimiento:</label><br />
+  <input type="date" id="fecha_nac_miembro" name="fecha_nac_miembro" required
+    value="{{request.form.fecha_nac_miembro}}" oninput="mostrarEdad()" class="{% if campo == 'fecha_nac_miembro' %}error{% endif %}"/>
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'fecha_nac_miembro' %}
+    <p class="error-mensaje">⚠ La fecha de nacimiento ingresada es inválida o no cumple con la edad mínima.</p>
+  {% endif %}
+  <br /><br />
+  
+  <!-- Span que mostrará la edad calculada -->
+  <!-- Se actualiza automáticamente al seleccionar/modificar la fecha -->
+  <span id="edad_miembro" style="font-weight: bold;">
+    <!-- Ejemplo dinámico: "Edad: 27 años" -->
+  </span><br /><br />
+
+  <!-- ░▒▓ Campo de selección de nacionalidad ▓▒░ -->
+  <label for="nacionalidad_miembro">Nacionalidad:</label><br />
+  <select name="nacionalidad_miembro" id="nacionalidad_miembro" required class="{% if campo == 'nacionalidad_miembro %}error{% endif %}">
+    <option value="" selected>-- Seleccione nacionalidad --</option>
+    <option value="Alemania">Alemania</option>
+    <option value="Armenia">Armenia</option>
+    <option value="Argentina">Argentina</option>
+    <option value="Australia">Australia</option>
+    <option value="Bolivia">Bolivia</option>
+    <option value="Brasil">Brasil</option>
+    <option value="Camerún">Camerún</option>
+    <option value="Canadá">Canadá</option>
+    <option value="Chile">Chile</option>
+    <option value="China">China</option>
+    <option value="Colombia">Colombia</option>
+    <option value="Corea del Sur">Corea del Sur</option>
+    <option value="Cuba">Cuba</option>
+    <option value="Ecuador">Ecuador</option>
+    <option value="Egipto">Egipto</option>
+    <option value="España">España</option>
+    <option value="Estados Unidos">Estados Unidos</option>
+    <option value="Filipinas">Filipinas</option>
+    <option value="Francia">Francia</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Grecia">Grecia</option>
+    <option value="Haití">Haití</option>
+    <option value="Hungría">Hungría</option>
+    <option value="India">India</option>
+    <option value="Irlanda">Irlanda</option>
+    <option value="Israel">Israel</option>
+    <option value="Italia">Italia</option>
+    <option value="Japón">Japón</option>
+    <option value="Líbano">Líbano</option>
+    <option value="México">México</option>
+    <option value="Marruecos">Marruecos</option>
+    <option value="Nigeria">Nigeria</option>
+    <option value="Pakistán">Pakistán</option>
+    <option value="Paraguay">Paraguay</option>
+    <option value="Perú">Perú</option>
+    <option value="Polonia">Polonia</option>
+    <option value="Portugal">Portugal</option>
+    <option value="Reino Unido">Reino Unido</option>
+    <option value="República Dominicana">República Dominicana</option>
+    <option value="Rumania">Rumania</option>
+    <option value="Rusia">Rusia</option>
+    <option value="Senegal">Senegal</option>
+    <option value="Siria">Siria</option>
+    <option value="Sudáfrica">Sudáfrica</option>
+    <option value="Turquía">Turquía</option>
+    <option value="Ucrania">Ucrania</option>
+    <option value="Uruguay">Uruguay</option>
+    <option value="Venezuela">Venezuela</option>
+  </select><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'nacionalidad_miembro' %}
+    <p class="error-mensaje">⚠ La nacionalidad seleccionada es inválida.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para la religio del miembro ▓▒░ -->
+  <label for="religion_miembro">Religion:</label><br />
+  <select id="religion_miembro" name="religion_miembro" required
+      class="{% if campo == 'religion_miembro' %}error{% endif %}">
+    <option value="" selected></option>
+    <option value="Catolico">Catolico</option>
+    <option value="Evangelista">Evangelista</option>
+    <option value="Mormon">Mormon</option>
+    <option value="Judio">Judio</option>
+  </select>
+  <br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'religion_miembro' %}
+    <p class="error-mensaje">⚠ La religión seleccionada es inválida.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para el estado civil del miembro ▓▒░ -->
+  <label for="estado_civil_miembro">Estado Civil:</label><br />
+  <select id="estado_civil_miembro" name="estado_civil_miembro" required class="{% if campo == 'estado_civil_miembro' %}error{% endif %}">
+    <option value="" selected></option>
+    <option value="soltero">Soltero</option>
+    <option value="concubinato">Concubinato</option>
+    <option value="casado">Casado</option>
+    <option value="divorciado">Divorciado</option>
+    <option value="viudo">Viudo</option>
+  </select>
+  <br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+ {% if campo == 'estado_civil_miembro' %}
+    <p class="error-mensaje">⚠ El estado civil seleccionada es inválida.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para característica (prefijo de área) ▓▒░ -->
+  <label for="caract_miembro">Código de área --sin 0--:</label><br />
+  <input type="text" id="caract_miembro" name="caract_miembro" maxlength="4" required
+      class="{% if campo == 'caract_miembro' %}error{% endif %}"
+      pattern="[1-9][0-9]{1,3}" placeholder="Ej.: 11 o 2964" title="Sin 0 ni +. Ej.: 11 o 2964"
+      value="{{ request.form.caracteristica_miembro }}" /><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'caract_miembro' %}
+    <p class="error-mensaje">⚠ El código de área ingresado es inválido o demasiado largo.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para número principal de teléfono ▓▒░ -->
+  <label for="telefono_miembro">Número de teléfono --sin 15--:</label><br />
+  <input type="text" id="telefono_miembro" name="telefono_miembro" maxlength="8" required
+      class="{% if campo == 'telefono_miembro' %}error{% endif %}"
+      pattern="(?!8)\d{6,8}" placeholder="Ej.: 6078911" title="Sin 0 ni 15" value="{{ request.form.telefono_miembro }}" /><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'telefono_miembro' %}
+    <p class="error-mensaje">⚠ El número de teléfono ingresado es inválido o demasiado largo.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para datos de emergencia teléfono ▓▒░ -->
+  <label for="emergencia_miembro">Contacto de Emergencia:</label><br />
+  <input type="text" id="emergencia_miembro" name="emergencia_miembro"placeholder="Telefóno, Parentesco"
+      value="{{request.form.emergencia_miembro}}" class="{% if campo == 'emergencia_miembro' %}error{% endif %}"/><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'emergencia_miembro' %}
+    <p class="error-mensaje">⚠ El contacto de emergencia ingresado es inválido o demasiado largo.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para la direccion del miembro ▓▒░ -->
+  <label for="direccion_miembro">Direccion:</label><br />
+  <input type="text" id="direccion_miembro" name="direccion_miembro"
+      value="{{request.form.direccion_miembro}}" class="{% if campo == 'direccion_miembro' %}error{% endif %}"/><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'direccion_miembro' %}
+    <p class="error-mensaje">⚠ La dirección ingresada es inválida o demasiado larga.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para el mail del miembro ▓▒░ -->
+  <label for="mail_miembro">Correo electrónico:</label><br />
+  <input type="mail" id="mail_miembro" name="mail_miembro" value="{{request.form.mail_miembro}}"
+      class="{% if campo == 'mail_miembro' %}error{% endif %}"/><br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'mail_miembro' %}
+    <p class="error-mensaje">⚠ El correo electrónico ingresado es inválido o demasiado largo.</p>
+  {% endif %}
+  <br /><br />
+
+  <!-- ░▒▓ Campo para la fecha de afiliacion del miembro ▓▒░ -->
+  <label for="fecha_afil_miembro">Fecha de Afiliación:</label><br />
+  <input type="date" id="fecha_afil_miembro" name="fecha_afil_miembro" required 
+      value="{{request.form.fecha_afil_miembro}}" class="{% if campo == 'fecha_afil_miembro' %}error{% endif %}"/>
+  <br /><br />
+  <!-- Mensaje de error si el campo es inválido -->
+  {% if campo == 'fecha_afil_miembro' %}
+    <p class="error-mensaje">⚠ La fecha de afiliación ingresada es inválida.</p>
+  {% endif %}
+  <br /><br />
+  
+  <button type="submit">Aceptar</button>
+  <button type="button" onclick="irHome()">Cancelar</button>
+</form>
+<div id="resultado"></div>
+
+<!-- Mensajes de error o éxito -->
+
+{% if mensaje and mensaje != 'ok' %}
+  <div class="alerta-error">
+    ⚠ {{mensaje.replace('_', ' ').capitalize()}}
+  </div>
+{% endif %}
+
+{% if mensaje == 'ok' %}
+<div id="popup" style="display: none; border: 1px solid #999; padding: 15px; background: #eee; margin: top 20px;">
+  <p>{{mensaje}}</p>
+  <button onclick="cargarOtra()">Cargar Otro</button>
+  <button onclick="irHome()">Cancelar</button>
+</div>
+{% endif %}
+
+<script>
+  // Esto lee la variable de backend inyectada
+  const mensaje = "{{ mensaje | default('') }}";
+
+  // Si el mensaje es 'ok', muestra el popup
+  if (mensaje === 'ok') {
+    document.getElementById('popup').style.display = 'block';
+  }
+
+  // Función para cargar otro usuario
+  function cargarOtra() {
+    window.location.href = '/nvo_usuario';
+  }
+
+  // Función para redirigir al home
+  function irHome() {
+    window.location.href = '/home';
+  }
+
+  // Función para buscar el nombre del grupo por su número
+  function buscarNombreGrupo(num) {
+    if (!num) {
+      document.getElementById('nombre_grupo').value = '';
+      return;
+    }
+
+    fetch(`/grupo_nombre/${num}`)
+      .then(response => response.json())
+      .then(data => {
+        const nombre = data.nombre || 'Grupo no encontrado';
+        document.getElementById('nombre_grupo').value = nombre;
+        document.getElementById('hidden_nombre_grupo').value = nombre;
+      });
+  }
+  
+  // Función para mostrar/ocultar la contraseña
+  function lookPassword(icon) {
+    const fieldId = icon.getAttribute("data-target");
+    const input = document.getElementById(fieldId);
+
+    if (input) {
+      input.type = input.type === "password" ? "text" : "password";
+    }
+  }
+
+    // ░▒▓ Función que calcula la edad y verifica la mínima ▓▒░
+// Se ejecuta al modificar el campo de fecha
+function mostrarEdad() {
+  const input = document.getElementById("fecha_nac_miembro").value;
+  const edadSpan = document.getElementById("edad_miembro");
+
+  if (input) {
+    const fechaNac = new Date(input);
+    const hoy = new Date();
+
+    // Calculamos edad en años
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mes = hoy.getMonth() - fechaNac.getMonth();
+    const dia = hoy.getDate() - fechaNac.getDate();
+    if (mes < 0 || (mes === 0 && dia < 0)) {
+      edad--;
+    }
+
+    // Verificamos si cumple la edad mínima requerida
+    if (edad >= 6) {
+      edadSpan.textContent = `Edad: ${edad} años`;
+      edadSpan.style.color = "#000";  // Texto normal si la edad es válida
+    } else {
+      edadSpan.textContent = `Edad inválida (mínimo 6 años)`;
+      edadSpan.style.color = "#aa0000";  // Rojo si no cumple
+    }
+  } else {
+    edadSpan.textContent = '';  // Limpiamos si no hay fecha seleccionada
+  }
+}
+
+</script>
+
+{% endblock %}

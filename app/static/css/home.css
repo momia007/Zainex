@@ -1,0 +1,15 @@
+/* home.css */
+h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.link-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.link-panel a {
+  font-weight: bold;
+}

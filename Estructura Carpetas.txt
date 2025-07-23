@@ -1,0 +1,32 @@
+zainex_scout/
+│
+├── app/                    ← Código fuente principal
+│   ├── __init__.py
+│   ├── routes/             ← Endpoints organizados por módulo
+│   │   ├── auth.py         ← Login, logout, registro de usuarios
+│   │   ├── personas.py     ← Beneficiarios, adultos
+│   │   └── finanzas.py     ← Cuentas, movimientos
+│   ├── models/             ← Modelos de base de datos
+│   │   ├── usuarios.py
+│   │   └── personas.py
+│   ├── utils/              ← Funciones de utilidad (hash, validaciones)
+│   │   └── generar_hash.py
+│   └── config.py           ← Configuraciones de conexión, constantes
+│
+├── templates/              ← Archivos HTML (si usás Flask clásico)
+│   └── login.html
+│
+├── static/                 ← CSS, JS, imágenes
+│
+├── docs/                   ← Documentación técnica y funcional
+│   ├── arquitectura.md
+│   ├── modelos.md
+│   └── endpoints.md
+│
+├── tests/                  ← Pruebas unitarias
+│
+├── requirements.txt
+├── .env                    ← Variables sensibles (conexión a DB, secretos)
+├── run.py                  ← Punto de entrada a la app Flask
+└── README.md               ← Descripción general del proyecto
+

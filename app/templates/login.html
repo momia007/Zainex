@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar sesión - Zainex</title>
+</head>
+
+<body>
+  <h2>Iniciar sesión</h2>
+  <form id="loginForm">
+    <label>DNI:</label>
+    <input type="text" name="dni" required><br><br>
+
+    <label>Contraseña:</label>
+    <input type="password" name="contrasena" required><br><br>
+
+    <button type="submit">Entrar</button>
+  </form>
+
+  <div id="resultado" style="margin-top:20px;"></div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const resultado = document.getElementById('resultado');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        dni: form.dni.value,
+        contrasena: form.contrasena.value
+      };
+
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+      resultado.innerText = json.mensaje || 'Error inesperado';
+
+      if (res.ok) {
+        window.location.href = '/home';  // 👈 redirección manual
+        resultado.style.color = 'green';
+      } else {
+        resultado.style.color = 'red';
+      }
+    });
+  </script>
+</body>
+</html>

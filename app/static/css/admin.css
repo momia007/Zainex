@@ -1,0 +1,36 @@
+/* admin.css */
+.formulario-admin {
+  padding: 20px;
+  border: 1px solid #ccc;
+  background: #f4f4f4;
+  border-radius: 6px;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+.alerta-error {
+  background-color: #fee;
+  border: 1px solid #c00;
+  color: #900;
+  padding: 8px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+}
+
+input.error, select.error {
+  border: 2px solid #c00;
+  background-color: #fff5f5;
+}
+
+.error-mensaje {
+  color: #c00;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+}

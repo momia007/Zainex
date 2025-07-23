@@ -1,0 +1,32 @@
+📦 Checklist rápido para agregar una pagina y que este disponible
+
+[x] ¿El archivo XXXXXXXX.html está en templates/? 
+
+[x] ¿La ruta /XXXXXXXX está definida en Flask? (admin.py)
+
+[x] ¿El enlace en el padre apunta correctamente?
+
+
+
+CODIGOS DE ERROR POR CONSOLA
+✅ 2xx — Éxito
+Código	Significado	Descripción breve
+200 OK	Todo bien	La solicitud fue exitosa y el servidor devolvió lo esperado
+201 Created	Recurso creado	Se creó algo nuevo (ej. al guardar un usuario)
+204 No Content	Sin contenido	La solicitud fue exitosa pero no hay datos que devolver
+🔁 3xx — Redirección
+Código	Significado	Descripción breve
+301 Moved Permanently	Redirección permanente	El recurso cambió de URL definitivamente
+302 Found	Redirección temporal	El recurso está en otra URL por ahora
+304 Not Modified	No modificado	El navegador puede usar la versión en caché, no hay cambios
+❌ 4xx — Error del cliente
+Código	Significado	Descripción breve
+400 Bad Request	Solicitud inválida	Error de sintaxis o parámetros mal formados
+401 Unauthorized	No autorizado	Falta autenticación o token inválido
+403 Forbidden	Prohibido	El usuario no tiene permisos para acceder
+404 Not Found	No encontrado	El recurso solicitado no existe
+409 Conflict	Conflicto	Ej. al intentar guardar un DNI duplicado
+💥 5xx — Error del servidor
+Código	Significado	Descripción breve
+500 Internal Server Error	Error interno	Algo falló en el backend
+503 Service Unavailable	No disponible	El servidor está sobrecargado o en mantenimiento

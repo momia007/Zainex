@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+  Registrar Movimiento
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block encabezado %}
+  {{ current_user.nombre }} estás en ➕ Registro de Movimiento Contable
+{% endblock %}
+
+{% block contenido %}
+  <form method="POST">
+    <label>Tipo:</label>
+    <select name="tipo_mov" required>
+      <option value="">Seleccionar</option>
+      <option value="Ingreso">Ingreso</option>
+      <option value="Egreso">Egreso</option>
+    </select>
+
+    <label>Fecha del movimiento:</label>
+    <input type="date" name="fecha_mov" required>
+
+    <label>Detalle:</label>
+    <input type="text" name="detalle_mov" maxlength="100" placeholder="Ej: compra de insumos" required>
+
+    <label>Rubro:</label>
+    <select name="rubro_mov" required>
+      <option value="">Seleccionar</option>
+      <option>AFILIACIONES</option>
+      <option>SERVICIOS</option>
+      <option>GASTOS OPERATIVOS</option>
+      <option>MANT. SEDE</option>
+      <option>INVERSIONES</option>
+      <option>EVENTOS</option>
+      <option>INDUMENTARIA</option>
+      <option>CUOTA</option>
+      <option>DONACIONES</option>
+      <option>MAT. Y UTILES</option>
+      <option>ART. LIMPIEZA</option>
+      <option>CAMPAMENTOS</option>
+      <option>REFRIGERIO</option>
+      <option>REDONDEO</option>
+      <option>CAPACITACIONES</option>
+    </select>
+
+    <label>N° de comprobante:</label>
+    <input type="text" name="comprobante_mov" maxlength="50">
+
+    <label>Link del comprobante (imagen / archivo):</label>
+    <input type="url" name="url_comprob_mov" placeholder="https://...">
+
+    <label>Importe:</label>
+    <input type="number" name="importe_mov" step="0.01" required>
+
+    <label>Observaciones:</label>
+    <textarea name="observaciones_mov" rows="3" placeholder="Detalles adicionales..."></textarea>
+
+    <button type="submit">💾 Guardar Movimiento</button>
+    <button type="button" onclick="window.location.href='/libro_caja'">Cancelar</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,70 @@
+<!-- templates/miembros-->
+{% extends 'base.html' %}
+
+{% block titulo %}
+    miembros
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
+{% endblock %}
+
+{% block encabezado %}
+    🧑‍🤝‍🧑 Miembros en tu grupo
+{% endblock %}
+
+{% block contenido %}
+    {% if current_user.super_admin or current_user.rol_usuario =='admin' %}
+        <a href="/nvo_miembro">➕ Agregar miembro</a>
+    {% else %}
+        <a href="#" class="deshabilitado">🔒 Agregar usuario</a>
+    {% endif %}
+
+    <table>
+    <thead>
+        <tr>
+        <th>Grupo</th>
+        <th>Función</th>
+        <th>Apellido</th>
+        <th>Nombre</th>
+        <th>Estado</th>
+        <th>Situacion</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for miembro in miembros %}
+        <tr>
+            <td>{{ miembro.nombre_grupo }}</td>
+            <td>{{ miembro.nombre_funcion or 'Sin función asignada' }}</td>
+            <td>{{ miembro.apellido_miembros }}</td>
+            <td>{{ miembro.nombre_miembros }}</td>
+            <td>{{ 'Activo' if miembro.activo_miembros == 1 else 'Inactivo' }}</td>
+            <td>{{ miembro.situacion_miembros }}</td>
+            <td>{{ 'Activo' if miembro.estado_miembros else 'Inactivo' }}</td>
+            <td>
+                {% if current_user.super_admin or current_user.rol_usuario == 'admin' %}
+                    <a href="/editar_miembros/{{ miembro.id_miembros }}">✏️</a>
+                    <a href="/desactivar_miembros/{{ miembro.id_miembros }}">🗑️</a>
+                {% else %}
+                    <span class="deshabilitado">✏️</span>
+                    <span class="deshabilitado">🗑️</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+    </table>
+
+
+    <button type="button" onclick="irHome()">Cancelar</button>
+    
+    <!-- Script para manejar la navegación y volver al home-->
+    <script>
+        function irHome() {
+        window.location.href = '/home';
+        }
+    </script>
+
+{% endblock %}

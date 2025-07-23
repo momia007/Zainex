@@ -1,0 +1,164 @@
+<!-- templates/nvo_usurario.html -->
+{% extends 'base.html' %}
+
+{% block titulo %}Nuevo Usuario{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block encabezado %}
+Crear Nuevo Usuario
+{% endblock %}
+
+{% block contenido %}
+<form id="form-funcion" method="POST" action="/guardar_usuario">
+  <label for="num_grupo">Nº de Grupo:</label><br />
+
+  {% if current_user.super_admin %}
+  <input type="text" name="num_grupo" id="num_grupo" required value="{{request.form.num_grupo}}" oninput="buscarNombreGrupo(this.value)" /><br /><br />
+  <label for="nombre_grupo">Nombre del Grupo:</label><br />
+  <!-- Campo oculto que permite guardar el nombre del grupo para no borrarlo si faya la validacion-->
+  <input type="hidden" name="nombre_grupo" id="hidden_nombre_grupo" value="{{ request.form.nombre_grupo or nombre_grupo }}">
+
+  <input type="text" id="nombre_grupo" disabled value="{{ request.form.nombre_grupo or nombre_grupo }}">
+  {% else %}
+  <!-- Número de grupo -->
+  <input type="text" value="{{ request.form.num_grupo or num_grupo }}" disabled />
+  <input type="hidden" name="num_grupo" value="{{ request.form.num_grupo or num_grupo }}" /><br /><br />
+
+  <!-- Nombre del grupo -->
+  <label>Nombre del Grupo:</label><br />
+  <input type="text" value="{{ request.form.nombre_grupo or nombre_grupo }}" disabled />
+  <input type="hidden" name="nombre_grupo" value="{{ request.form.nombre_grupo or nombre_grupo }}" /><br /><br />
+  {% endif %}
+
+
+  <label for="dni_usuario">DNI del Usuario:</label><br />
+  <input type="text" id="dni_usuario" name="dni_usuario" pattern="\d{7,8}" maxlength="8" required value="{{request.form.dni_usuario}}"/><br /><br />
+
+  <!-- Clave -->
+<div style="position: relative; display: inline-block;">
+  <label for="password">Clave:</label><br />
+  <input type="password" id="password" name="password" required value="{{request.form.password}}" /><br /><br />
+  <span onclick="lookPassword(this)" data-target="password" style="
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;">👀</span>
+</div>
+<br>
+<!-- Repetir Clave -->
+<div style="position: relative; display: inline-block;">
+  <label for="re_password">Repetir Clave:</label><br />
+  <input type="password" id="re_password" name="re_password" required value="{{request.form.re_password}}" /><br /><br />
+  <span onclick="lookPassword(this)" data-target="re_password" style="
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;">👀</span>
+</div>
+  <br />
+  <label for="rol">Rol:</label><br />
+  <select id="rol" name="rol" required >
+    <option value="" selected></option>
+    <option value="colaborador">Colaborador</option>
+    <option value="admin">Administrador</option>
+  </select>
+<br /><br />
+  <label for="nombre">Nombres:</label><br />
+  <input type="text" id="nombre" name="nombre" required value="{{request.form.nombre}}"/><br /><br />
+
+  <label for="apellido">Apellido:</label><br />
+  <input type="text" id="apellido" name="apellido" required value="{{request.form.apellido}}"/><br /><br />
+
+  <br /><br />
+
+  <button type="submit">Aceptar</button>
+  <button type="button" onclick="irHome()">Cancelar</button>
+</form>
+<div id="resultado"></div>
+
+<!-- Mensajes de error o éxito -->
+{% set mensaje = mensaje if mensaje is not none else '' %}
+{% if mensaje and mensaje != 'ok' %}
+  <div class="alerta-error">
+    {% if mensaje == 'nombre_vacio' %}
+      ⚠️ El campo nombres no puede ser en blanco.
+    {% elif mensaje == 'nombre_largo' %}
+      ⚠️ El El/los nombres son demasiado largos.
+    {% elif mensaje == 'apellido_vacio' %}
+      ⚠️ El campo apellido no puede ser en blanco.
+    {% elif mensaje == 'apellido_largo' %}
+      ⚠️ El El Apellido es demasiado largos.
+    {% elif mensaje == 'password_invalido' %}
+      ⚠️ La contraseña debe tener 6 o mas caracteres de largo.
+    {% elif mensaje == 'password_no_coincide' %}
+      ⚠️ Las contraseñas deben ser iguales.
+    {% elif mensaje == 'rol_invalido' %}
+      ⚠️ Ud. no tiene permiso consulte con un "admin".
+    {% elif mensaje == 'rol_vacio' %}
+      ⚠️ El campo rol no puede estar vacío.
+    {% elif mensaje == 'usuario_duplicado' %}
+      ⚠️ Ya existe un usuario con ese DNI.
+    {% else %}
+      ⚠️ Error desconocido. Verificá los datos.
+    {% endif %}
+  </div>
+{% endif %}
+<div id="popup" style="display: none; border: 1px solid #999; padding: 15px; background: #eee; margin: top 20px;">
+  <p>🎉 El usuario se creó correctamente.</p>
+  <button onclick="cargarOtra()">Cargar Otro</button>
+  <button onclick="irHome()">Cancelar</button>
+</div>
+
+<script>
+  // Esto lee la variable de backend inyectada
+  const mensaje = "{{ mensaje | default('') }}";
+
+  // Si el mensaje es 'ok', muestra el popup
+  if (mensaje === 'ok') {
+    document.getElementById('popup').style.display = 'block';
+  }
+
+  // Función para cargar otro usuario
+  function cargarOtra() {
+    window.location.href = '/nvo_usuario';
+  }
+
+  // Función para redirigir al home
+  function irHome() {
+    window.location.href = '/home';
+  }
+
+  // Función para buscar el nombre del grupo por su número
+  function buscarNombreGrupo(num) {
+    if (!num) {
+      document.getElementById('nombre_grupo').value = '';
+      return;
+    }
+
+    fetch(`/grupo_nombre/${num}`)
+      .then(response => response.json())
+      .then(data => {
+        const nombre = data.nombre || 'Grupo no encontrado';
+        document.getElementById('nombre_grupo').value = nombre;
+        document.getElementById('hidden_nombre_grupo').value = nombre;
+      });
+  }
+  
+  // Función para mostrar/ocultar la contraseña
+  function lookPassword(icon) {
+    const fieldId = icon.getAttribute("data-target");
+    const input = document.getElementById(fieldId);
+
+    if (input) {
+      input.type = input.type === "password" ? "text" : "password";
+    }
+  }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+table.libro-caja {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+  font-size: 0.95em;
+}
+
+table.libro-caja th,
+table.libro-caja td {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+table.libro-caja thead {
+  background-color: #f1f1f1;
+}
+
+table.libro-caja tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table.libro-caja tbody tr:hover {
+  background-color: #e8f3ff;
+}
+
+button {
+  margin-top: 1em;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  background-color: #0a78d1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #085fa4;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 60px;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-contenido {
+  background-color: #fff;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+  font-size: 0.95em;
+}
+
+.cerrar {
+  color: #666;
+  float: right;
+  font-size: 26px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-contenido ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.modal-contenido li {
+  margin: 8px 0;
+}

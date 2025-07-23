@@ -1,0 +1,102 @@
+<!-- ../templetes/nvo.grupo.html-->
+{% extends 'base.html' %}
+
+{% block titulo %}Nuevo Grupo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block encabezado %}
+🧩 Crear Nuevo Grupo
+{% endblock %}
+
+{% block contenido %}
+  <div class="alerta_error">
+    {% if mensaje == 'grupo_duplicado' %}
+      <p style="color: red;">⚠️ Ya existe un grupo con ese número. Por favor, elegí otro.</p>
+    {% elif mensaje == 'numero_invalido' %}
+      <p style="color: red;">⚠️ El número de grupo debe ser numérico.</p>
+    {% elif mensaje == 'numero_largo' %}
+      <p style="color: red;">⚠️ El número de grupo no puede tener más de 6 dígitos.</p>
+    {% elif mensaje == 'nombre_vacio' %}
+      <p style="color: red;">⚠️ El nombre no puede estar vacío.</p>
+    {% elif mensaje == 'distrito_invalido' %}
+      <p style="color: red;">⚠️ El distrito debe ser numérico.</p>
+    {% elif mensaje == 'distrito_largo' %}
+      <p style="color: red;">⚠️ El distrito no puede tener más de 6 dígitos.</p>
+    {% elif mensaje == 'zona_invalida' %}
+      <p style="color: red;">⚠️ La zona debe ser numérica.</p>
+    {% elif mensaje == 'zona_larga' %}
+      <p style="color: red;">⚠️ La zona no puede tener más de 6 dígitos.</p>
+    {% endif %}
+
+</div>
+<!-- Formulario accesible solo para usuarios con permisos de super usuario.
+     Permite cargar nuevos Grupos al sistema -->
+<div class="formulario">
+  <form id="form-funcion" method="POST" action="/guardar_grupo">
+
+    <label for="numero">Número:</label><br />
+    <input type="text" id="numero" name="numero" required oninput="verificarGrupo(this.Value)" /><br /><br />
+
+    <label for="nombre">Nombre del Grupo:</label><br />
+    <input type="text" id="nombre" name="nombre" required /><br /><br />
+
+    <label for="distrito">Nro. Distrito</label><br />
+    <input type="number" id="distrito" name="distrito" required /><br /><br />
+
+    <label for="zona">Nro. Zona</label><br />
+    <input type="number" id="zona" name="zona" required /><br /><br />
+
+    <br /><br />
+
+    <button type="submit">💾 Guardar</button>
+    <button type="button" onclick="irHome()">Cancelar</button>
+  </form>
+
+  <div id="popup" style="display: none; border: 1px solid #999; padding: 15px; background: #eee; margin-top: 20px;">
+    <p>🎉 Grupo creado correctamente.</p>
+    <button onclick="cargarOtra()">Cargar Otro</button>
+    <button onclick="irHome()">Terminar</button>
+  </div>
+</div>
+
+<script>
+    const mensaje = "{{ mensaje | default('') }}";
+    if (mensaje === 'ok') {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('btn_guardar').style.display = 'none';
+    }
+
+    function verificarGrupo(nombre) {
+      if (!nombre.trim()) {
+        document.getElementById("mensaje_grupo").textContent = "";
+        return;
+      }
+
+      fetch(`/existe_grupo/${encodeURIComponent(nombre)}`)
+        .then(res => res.json())
+        .then(data => {
+          const msg = document.getElementById("mensaje_grupo");
+          const btn = document.getElementById("btn_guardar");
+          if (data.existe) {
+            msg.textContent = "⚠️ El grupo ya existe";
+            btn.disabled = true;
+          } else {
+            msg.textContent = "";
+            btn.disabled = false;
+          }
+        });
+    }
+
+    function cargarOtra() {
+      window.location.href = '/nvo_grupo';
+    }
+
+    function irHome() {
+      window.location.href = '/home';
+    }
+  </script>
+
+{% endblock %}

@@ -1,0 +1,3 @@
+{% macro formato_monto(valor) %}
+  {{ "{:,.2f}".format(valor).replace(",", "X").replace(".", ",").replace("X", ".") }}
+{% endmacro %}

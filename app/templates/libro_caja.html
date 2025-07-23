@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% import 'partials/moneda_arg.html' as moneda %}
+
+{% block titulo %}
+  📘 Libro Caja
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/libro_caja.css') }}">
+{% endblock %}
+
+{% block encabezado %}
+  {{ current_user.nombre }} estás viendo el estado contable 📊
+{% endblock %}
+
+{% block contenido %}
+  <h2>📖 Registro contable</h2>
+
+  <table class="libro-caja">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Detalle</th>
+        <th>Rubro</th>
+        <th>Comprobante</th>
+        <th style="color:green;">Crédito</th>
+        <th style="color:red;">Débito</th>
+        <th>💰 Saldo acumulado</th>
+        <th>Conciliado</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        {% for mov in transacciones|sort(attribute='fecha_mov', reverse=true) %}
+          {% set credito = mov.importe_mov if mov.tipo_mov == 'Ingreso' else 0 %}
+          {% set debito = mov.importe_mov if mov.tipo_mov == 'Egreso' else 0 %}
+
+          <tr>
+            <td>{{ mov.fecha_mov.strftime('%d/%m/%Y') }}</td>
+            <td>{{ mov.detalle_mov }}</td>
+            <td>{{ mov.rubro_mov }}</td>
+            <td>
+              {% if mov.conciliado_mov %}
+                ✅ <a href="#" onclick="mostrarDetalles(JSON.parse('{{ mov | tojson | safe }}'))">
+                  {{ mov.comprobante_mov }}
+                </a>
+              {% else %}
+                 <a href="#" onclick="mostrarDetalles(JSON.parse('{{ mov | tojson | safe }}'))">
+                   {{ mov.comprobante_mov or '—' }}
+                </a>
+              {% endif %}
+            </td>
+            <td style="color:green;">{{ moneda.formato_monto(credito) }}</td>
+            <td style="color:red;">{{ moneda.formato_monto(debito) }}</td>
+            <td><strong>{{ moneda.formato_monto(mov.saldo_actual) }}</strong></td>
+            <td>
+              {% if mov.conciliado_mov %}
+                ✅
+              {% else %}
+                ❌
+              {% endif %}
+            </td>
+
+          </tr>
+        {% endfor %}
+    </tbody>
+
+  </table>
+
+  <button onclick="window.location.href='/nvo_movimiento'">➕ Registrar Movimiento</button>
+  <button onclick="window.location.href='/conciliar'">🔄 Conciliación Bancaria</button>
+  <button onclick="irHome()">Cancelar</button>
+  <!-- Modal emergente para ver detalles -->
+  <div id="modal-movimiento" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModal()">&times;</span>
+      <h3>📄 Detalles del Movimiento</h3>
+      <ul id="datos-movimiento"></ul>
+    </div>
+  </div>
+
+  <script>
+    function mostrarDetalles(mov) {
+      const contenedor = document.getElementById('datos-movimiento');
+      contenedor.innerHTML = `
+        <li><strong>Fecha:</strong> ${mov.fecha_mov}</li>
+        <li><strong>Detalle:</strong> ${mov.detalle_mov}</li>
+        <li><strong>Rubro:</strong> ${mov.rubro_mov}</li>
+        <li><strong>Tipo:</strong> ${mov.tipo_mov}</li>
+        <li><strong>Importe:</strong> $${parseFloat(mov.importe_mov).toFixed(2)}</li>
+        <li><strong>Comprobante:</strong> ${mov.comprobante_mov}</li>
+        <li><strong>Conciliado:</strong> ${mov.conciliado_mov == 1 ? 'Sí' : 'No'}</li>
+        <li><strong>Observaciones:</strong> ${mov.observaciones_mov || '—'}</li>
+      `;
+      document.getElementById('modal-movimiento').style.display = 'block';
+    }
+
+    function cerrarModal() {
+      document.getElementById('modal-movimiento').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('modal-movimiento');
+      if (event.target == modal) {
+        cerrarModal();
+      }
+    }
+
+    function irHome() {
+      window.location.href = '/';
+    }
+  </script>
+{% endblock %}
