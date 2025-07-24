@@ -2,4 +2,5 @@ Flask
 Flask-Login
 PyMySQL
 bcrypt
-
+gunicorn
+python-dotenv
