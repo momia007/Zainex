@@ -16,6 +16,14 @@
 {% block contenido %}
   <h2>📖 Registro contable</h2>
 
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
   <table class="libro-caja">
     <thead>
       <tr>
@@ -31,7 +39,7 @@
     </thead>
 
     <tbody>
-        {% for mov in transacciones|sort(attribute='fecha_mov', reverse=true) %}
+        {% for mov in transacciones %}
           {% set credito = mov.importe_mov if mov.tipo_mov == 'Ingreso' else 0 %}
           {% set debito = mov.importe_mov if mov.tipo_mov == 'Egreso' else 0 %}
 
@@ -107,7 +115,7 @@
     }
 
     function irHome() {
-      window.location.href = '/';
+      window.location.href = '/home';
     }
   </script>
 {% endblock %}

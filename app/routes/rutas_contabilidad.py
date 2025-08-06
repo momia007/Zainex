@@ -15,11 +15,7 @@ from app.config import conectar_db
 @admin_bp.route('/libro_caja')
 @login_required
 def libro_caja():
-    """
-    Vista para mostrar todos los movimientos registrados, con filtros opcionales
-    por fecha, tipo o rubro.
-    """
-    tipo_filtro = request.args.get('tipo')  # ej: 'Ingreso' o 'Egreso'
+    tipo_filtro = request.args.get('tipo')
     rubro_filtro = request.args.get('rubro')
     desde = request.args.get('desde')
     hasta = request.args.get('hasta')
@@ -34,7 +30,6 @@ def libro_caja():
                 LEFT JOIN usuarios u ON m.creado_por_mov = u.id_usuarios
                 WHERE 1=1
             """
-            filtros = []
             valores = []
 
             if tipo_filtro:
@@ -48,22 +43,51 @@ def libro_caja():
             if desde and hasta:
                 query += " AND fecha_mov BETWEEN %s AND %s"
                 valores.extend([desde, hasta])
-           
+
+            query += " ORDER BY fecha_mov ASC, id_mov ASC"
             cursor.execute(query, valores)
             transacciones = cursor.fetchall()
 
-            saldo = 0
+            # Separar saldo inicial antes de calcular
+            saldo_inicial = None
+            otros_movimientos = []
+
             for mov in transacciones:
+                if mov['detalle_mov'].lower().startswith('saldo inicial'):
+                    saldo_inicial = mov
+                else:
+                    otros_movimientos.append(mov)
+
+            # Ordenar cronológicamente los demás movimientos
+            otros_movimientos.sort(key=lambda x: (x['fecha_mov'], x['id_mov']))
+
+            # Usar saldo inicial como punto de partida
+            saldo = saldo_inicial['importe_mov'] if saldo_inicial else 0
+
+            # Calcular saldo acumulado
+            for mov in otros_movimientos:
                 if mov['tipo_mov'] == 'Ingreso':
                     saldo += mov['importe_mov']
                 elif mov['tipo_mov'] == 'Egreso':
                     saldo -= mov['importe_mov']
                 mov['saldo_actual'] = saldo
 
+            # Agregar saldo inicial al final con su propio saldo
+            if saldo_inicial:
+                saldo_inicial['saldo_actual'] = saldo_inicial['importe_mov']
+                otros_movimientos.append(saldo_inicial)
+
+            # Invertir para mostrar del más reciente al más antiguo
+            transacciones = list(reversed(otros_movimientos))
+
     finally:
         conn.close()
 
+    # Reordenar para que el saldo inicial quede al final visualmente
+    transacciones.sort(key=lambda x: x['detalle_mov'].lower().startswith('saldo inicial'))
+
     return render_template('libro_caja.html', transacciones=transacciones)
+
 
 
 
@@ -98,7 +122,7 @@ def nvo_movimiento():
                 flash('Movimiento registrado exitosamente', 'success')
         finally:
             conn.close()
-        return render_template('libro_caja.html')
+        return redirect(url_for('admin.libro_caja'))
 
     # Si entra por GET, muestra el formulario vacío
     return render_template('nvo_movimiento.html')
