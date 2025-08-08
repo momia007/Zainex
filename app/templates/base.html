@@ -10,7 +10,9 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
 
   <!-- CSS específico por vista -->
-  {% block extra_css %}{% endblock %}
+  {% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+  {% endblock %}
 </head>
 <body>
   <div class="container">
@@ -18,7 +20,8 @@
       <h1>{% block encabezado %}Panel Zainex{% endblock %}</h1>
     </header>
 
-    {% block contenido %}{% endblock %}
+    {% block content %}{% endblock %}
+    {% block extra_js %}{% endblock %}
   </div>
 </body>
 </html>

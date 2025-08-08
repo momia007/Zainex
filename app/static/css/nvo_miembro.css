@@ -1,0 +1,80 @@
+/* nvo_miembro.css — estilos específicos para el formulario de carga de miembros */
+
+/* === Contenedor del formulario === */
+.formulario {
+  max-width: 600px;
+  margin: auto;
+  padding: 1.5em;
+  background-color: #fdfdfd;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* === Etiquetas de campos === */
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 1em;
+}
+
+/* === Campos de entrada === */
+input[type="text"],
+input[type="date"],
+input[type="mail"],
+select {
+  width: 100%;
+  padding: 0.6em;
+  margin-top: 0.3em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+/* === Botones del formulario === */
+button {
+  margin-top: 1.5em;
+  margin-right: 0.8em;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* === Mensaje de validación por edad === */
+#edad_miembro {
+  font-weight: bold;
+  margin-top: 0.5em;
+}
+
+/* === Mensajes de error generales === */
+.alerta-error {
+  margin-top: 1em;
+  padding: 0.8em;
+  background-color: #ffe6e6;
+  border: 1px solid #cc0000;
+  color: #cc0000;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+/* === Popup de éxito === */
+#popup {
+  margin-top: 2em;
+  padding: 1.2em;
+  border: 2px solid #007bff;
+  background-color: #e6f0ff;
+  border-radius: 8px;
+  max-width: 400px;
+}
+
+#popup p {
+  font-size: 1.1em;
+  margin-bottom: 1em;
+}

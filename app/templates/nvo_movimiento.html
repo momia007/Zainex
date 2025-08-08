@@ -6,13 +6,15 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nvo_movimiento.css') }}">
 {% endblock %}
+
 
 {% block encabezado %}
   {{ current_user.nombre }} estás en ➕ Registro de Movimiento Contable
 {% endblock %}
 
-{% block contenido %}
+{% block content %}
   <form method="POST">
     <label>Tipo:</label>
     <select name="tipo_mov" required>

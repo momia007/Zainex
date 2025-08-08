@@ -1,10 +1,4 @@
-/* home.css — estilos específicos para la vista de inicio (home) */
-
-/* === Encabezado principal === */
-h2 {
-  margin-bottom: 15px;
-  color: #2c3e50;
-}
+/* contabilidad.css — estilos específicos para la vista de contabilidad */
 
 /* === Eliminar viñetas y márgenes de la lista === */
 .link-panel ul {
@@ -28,7 +22,7 @@ h2 {
   background-color: #e9ecef;
   border-radius: 6px;
   text-decoration: none;
-  color: #007bff;
+  color: #007bff; /* Azul moderno */
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
@@ -37,6 +31,3 @@ h2 {
 .link-panel a:not(.deshabilitado):hover {
   background-color: #d6e0f5;
 }
-
-/* === Enlaces deshabilitados ya están definidos en estilos.css === */
-/* Se respetan los estilos base para .deshabilitado */

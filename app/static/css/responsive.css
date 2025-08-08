@@ -1,0 +1,166 @@
+/* responsive.css — estilos adaptativos para todas las vistas de Zainex */
+
+@media screen and (max-width: 768px) {
+  /* === Estructura general === */
+  body {
+    padding: 0.5em;
+  }
+
+  .contenedor,
+  .contenido,
+  .main {
+    width: 95%;
+    margin: auto;
+  }
+
+  /* === Navbar y navegación === */
+  nav,
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  nav a,
+  .navbar a {
+    padding: 0.5em;
+    font-size: 1em;
+    display: block;
+    text-align: center;
+  }
+
+  /* === Encabezados === */
+  h1, h2, h3 {
+    font-size: 1.3em;
+    text-align: center;
+    margin-bottom: 0.5em;
+  }
+
+  /* === Tablas === */
+  table {
+    font-size: 0.85em;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table th,
+  table td {
+    padding: 6px;
+    word-break: break-word;
+    text-align: left;
+  }
+
+  /* === Formularios === */
+  form,
+  .formulario,
+  .grupo-form,
+  .funcion-form {
+    padding: 1em;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  label {
+    font-size: 0.95em;
+    display: block;
+    margin-bottom: 0.3em;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 0.95em;
+    padding: 0.5em;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* === Botones === */
+  button,
+  .btn,
+  input[type="submit"] {
+    width: 100%;
+    margin-top: 1em;
+    font-size: 1em;
+  }
+
+  /* === Íconos de acción en tablas === */
+  td a,
+  .deshabilitado,
+  .acciones a {
+    font-size: 1em;
+    display: inline-block;
+    margin: 0.2em 0;
+  }
+
+  /* === Popup === */
+  #popup {
+    width: 90%;
+    padding: 1em;
+  }
+
+  #popup p {
+    font-size: 1em;
+  }
+
+  /* === Íconos de mostrar contraseña 👀 === */
+  span[data-target] {
+    font-size: 1em;
+    right: 8px;
+  }
+
+  /* === Mensajes de error === */
+  .alerta-error,
+  .mensaje-error {
+    font-size: 0.95em;
+    padding: 0.6em;
+    margin-bottom: 1em;
+  }
+
+  /* === Login === */
+  .login-box {
+    width: 90%;
+    padding: 1em;
+    box-sizing: border-box;
+  }
+
+  .login-box input {
+    font-size: 1em;
+  }
+
+  /* === Dashboard / Home === */
+  .card,
+  .widget,
+  .panel {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+
+  /* === Libro Caja / Contabilidad === */
+  .resumen,
+  .movimientos,
+  .balance {
+    font-size: 0.9em;
+    padding: 0.5em;
+  }
+
+  /* === Grillas flexibles === */
+  .fila,
+  .columna {
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  /* === Ajustes visuales generales === */
+  .centrado {
+    text-align: center;
+  }
+
+  .oculto-en-mobile {
+    display: none;
+  }
+
+  .espaciado {
+    margin-bottom: 1em;
+  }
+}

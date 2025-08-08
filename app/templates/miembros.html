@@ -7,13 +7,14 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/miembros.css') }}"/>
 {% endblock %}
 
 {% block encabezado %}
     🧑‍🤝‍🧑 Miembros en tu grupo
 {% endblock %}
 
-{% block contenido %}
+{% block content %}
     {% if current_user.super_admin or current_user.rol_usuario =='admin' %}
         <a href="/nvo_miembro">➕ Agregar miembro</a>
     {% else %}

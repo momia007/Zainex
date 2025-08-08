@@ -1,0 +1,56 @@
+/* nvo_movimiento.css — estilos específicos para el formulario de movimientos contables */
+
+/* === Contenedor del formulario === */
+form {
+  max-width: 650px;
+  margin: auto;
+  padding: 1.5em;
+  background-color: #fdfdfd;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* === Etiquetas === */
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 1em;
+}
+
+/* === Campos de entrada === */
+input[type="text"],
+input[type="date"],
+input[type="url"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.6em;
+  margin-top: 0.3em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+/* === Textarea === */
+textarea {
+  resize: vertical;
+}
+
+/* === Botones === */
+button {
+  margin-top: 2em;
+  margin-right: 0.8em;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

@@ -1,3 +1,4 @@
+ <!-- ..templates/libro_caja.html -->
 {% extends 'base.html' %}
 {% import 'partials/moneda_arg.html' as moneda %}
 
@@ -13,7 +14,7 @@
   {{ current_user.nombre }} estás viendo el estado contable 📊
 {% endblock %}
 
-{% block contenido %}
+{% block content %}
   <h2>📖 Registro contable</h2>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -44,9 +45,9 @@
           {% set debito = mov.importe_mov if mov.tipo_mov == 'Egreso' else 0 %}
 
           <tr>
-            <td>{{ mov.fecha_mov.strftime('%d/%m/%Y') }}</td>
-            <td>{{ mov.detalle_mov }}</td>
-            <td>{{ mov.rubro_mov }}</td>
+            <td data-label="Fecha">{{ mov.fecha_mov.strftime('%d/%m/%Y') }}</td>
+            <td data-label="Detalle">{{ mov.detalle_mov }}</td>
+            <td data-label="Rubro">{{ mov.rubro_mov }}</td>
             <td>
               {% if mov.conciliado_mov %}
                 ✅ <a href="#" onclick="mostrarDetalles(JSON.parse('{{ mov | tojson | safe }}'))">
@@ -58,10 +59,10 @@
                 </a>
               {% endif %}
             </td>
-            <td style="color:green;">{{ moneda.formato_monto(credito) }}</td>
-            <td style="color:red;">{{ moneda.formato_monto(debito) }}</td>
-            <td><strong>{{ moneda.formato_monto(mov.saldo_actual) }}</strong></td>
-            <td>
+            <td data-label="Crédito" style="color:green;">{{ moneda.formato_monto(credito) }}</td>
+            <td data-label="Débito" style="color:red;">{{ moneda.formato_monto(debito) }}</td>
+            <td data-label="Saldo"><strong>{{ moneda.formato_monto(mov.saldo_actual) }}</strong></td>
+            <td data-label="Conciliado">
               {% if mov.conciliado_mov %}
                 ✅
               {% else %}

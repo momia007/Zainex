@@ -1,57 +1,49 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Crear funcion - Zainex</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+<!-- templates/crear_funcion.html -->
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Crear función - Zainex
+{% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-  </head>
-  <body>
-    <!-- Formulario accesible solo para usuarios con permisos de administrador.
-     Permite cargar nuevas funciones al sistema -->
-    <h2>Agregar Nueva Función</h2>
-    <form id="form-funcion" method="POST" action="/agregar_funcion">
-      <label for="nombre">Nombre de la función:</label><br />
-      <input type="text" id="nombre" name="nombre" required /><br /><br />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/funcion.css') }}">
+{% endblock %}
 
-      <label for="abreviacion">Abreviación:</label><br />
-      <input type="text" id="abreviacion" name="abreviacion" required /><br /><br />
+{% block encabezado %}
+    🛠️ Agregar Nueva Función
+{% endblock %}
 
-      <label for="descripcion">Descripción (opcional):</label><br />
-      <textarea
-        id="descripcion"
-        name="descripcion"
-        rows="3"
-        cols="40"
-      ></textarea
-      ><br /><br />
+{% block content %}
+    <form id="form-funcion" method="POST" action="{{ url_for('admin.agregar_funcion') }}">
+        <label for="nombre">Nombre de la función:</label><br />
+        <input type="text" id="nombre" name="nombre" required /><br /><br />
 
-      <button type="submit">Agregar Función</button>
-      <button onclick="irHome()">Terminar</button>
+        <label for="abreviacion">Abreviación:</label><br />
+        <input type="text" id="abreviacion" name="abreviacion" required /><br /><br />
+
+        <label for="descripcion">Descripción (opcional):</label><br />
+        <textarea id="descripcion" name="descripcion" rows="3" cols="40"></textarea><br /><br />
+
+        <button type="submit">Agregar Función</button>
+        <button type="button" onclick="irHome()">Terminar</button>
     </form>
-    <div id="resultado"></div>
-    <div id="popup" style="display: none; border: 1px solid #999; padding: 15px; background: #eee; margin: top 20px;">
-      <p>🎉 La función se creó correctamente.</p>
-      <button onclick="cargarOtra()">Cargar Otra</button>
-      <button onclick="irHome()">Terminar</button>
 
+    {% if mensaje == 'ok' %}
+    <div id="popup">
+        <p>🎉 La función se creó correctamente.</p>
+        <button onclick="cargarOtra()">Cargar Otra</button>
+        <button onclick="irHome()">Terminar</button>
     </div>
+    {% endif %}
 
     <script>
-      // Esto lee la variable de backend inyectada
-      const mensaje = "{{ mensaje | default('') }}";
+        function cargarOtra() {
+            window.location.href = "{{ url_for('admin.nva_funcion') }}";
+        }
 
-      if (mensaje === 'ok') {
-        document.getElementById('popup').style.display = 'block';
-      }
-
-      function cargarOtra() {
-        window.location.href = '/nva_funcion';
-      }
-
-      function irHome() {
-        window.location.href = '/home';
-      }
+        function irHome() {
+            window.location.href = "{{ url_for('admin.home') }}";
+        }
     </script>
-  </body>
-</html>
+{% endblock %}

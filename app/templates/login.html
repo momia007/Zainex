@@ -1,11 +1,12 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Iniciar sesión - Zainex</title>
-</head>
+{% extends 'base.html' %}
 
-<body>
+{% block title %}Iniciar sesión - Zainex{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
   <h2>Iniciar sesión</h2>
   <form id="loginForm">
     <label>DNI:</label>
@@ -18,7 +19,9 @@
   </form>
 
   <div id="resultado" style="margin-top:20px;"></div>
+{% endblock %}
 
+{% block extra_js %}
   <script>
     const form = document.getElementById('loginForm');
     const resultado = document.getElementById('resultado');
@@ -40,12 +43,11 @@
       resultado.innerText = json.mensaje || 'Error inesperado';
 
       if (res.ok) {
-        window.location.href = '/home';  // 👈 redirección manual
+        window.location.href = '/home';
         resultado.style.color = 'green';
       } else {
         resultado.style.color = 'red';
       }
     });
   </script>
-</body>
-</html>
+{% endblock %}

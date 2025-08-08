@@ -1,3 +1,6 @@
+/* libro_caja.css — estilos específicos para la vista de Libro Caja */
+
+/* === Tabla contable === */
 table.libro-caja {
   width: 100%;
   border-collapse: collapse;
@@ -24,22 +27,7 @@ table.libro-caja tbody tr:hover {
   background-color: #e8f3ff;
 }
 
-button {
-  margin-top: 1em;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  background-color: #0a78d1;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #085fa4;
-}
-
-/* Modal */
+/* === Modal emergente === */
 .modal {
   display: none;
   position: fixed;

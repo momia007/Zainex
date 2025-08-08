@@ -4,14 +4,16 @@
 {% block titulo %}Nuevo Usuario{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nvo_usuario.css') }}">
 {% endblock %}
+
 
 {% block encabezado %}
 Crear Nuevo Usuario
 {% endblock %}
 
-{% block contenido %}
+{% block content %}
 <form id="form-funcion" method="POST" action="/guardar_usuario">
   <label for="num_grupo">Nº de Grupo:</label><br />
 

@@ -7,13 +7,14 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/contabilidad.css') }}"/>
 {% endblock %}
 
 {% block encabezado %}
     {{ current_user.nombre }} estas en 📊 Libro de Caja
 {% endblock %}
 
-{% block contenido %}
+{% block content %}
   <div class="link-panel">
     <ul>
       {% if current_user.super_admin or current_user_admin %}

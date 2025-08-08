@@ -1,0 +1,57 @@
+/* miembros.css — estilos específicos para la vista de miembros */
+
+/* === Tabla de miembros === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+  font-size: 0.95em;
+}
+
+table th,
+table td {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+table thead {
+  background-color: #f1f1f1;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+  background-color: #e8f3ff;
+}
+
+/* === Enlaces de acción (editar, eliminar) === */
+td a {
+  margin: 0 6px;
+  text-decoration: none;
+  font-size: 1.1em;
+  color: #007bff;
+  transition: color 0.2s ease;
+}
+
+td a:hover {
+  color: #0056b3;
+}
+
+/* === Botón cancelar === */
+button {
+  margin-top: 1.5em;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

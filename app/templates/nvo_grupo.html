@@ -1,17 +1,18 @@
-<!-- ../templetes/nvo.grupo.html-->
+<!-- ../templates/nvo_grupo.html -->
 {% extends 'base.html' %}
 
 {% block titulo %}Nuevo Grupo{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/grupo.css') }}">
 {% endblock %}
 
 {% block encabezado %}
 🧩 Crear Nuevo Grupo
 {% endblock %}
 
-{% block contenido %}
+{% block content %}
   <div class="alerta_error">
     {% if mensaje == 'grupo_duplicado' %}
       <p style="color: red;">⚠️ Ya existe un grupo con ese número. Por favor, elegí otro.</p>
@@ -30,39 +31,35 @@
     {% elif mensaje == 'zona_larga' %}
       <p style="color: red;">⚠️ La zona no puede tener más de 6 dígitos.</p>
     {% endif %}
-
-</div>
-<!-- Formulario accesible solo para usuarios con permisos de super usuario.
-     Permite cargar nuevos Grupos al sistema -->
-<div class="formulario">
-  <form id="form-funcion" method="POST" action="/guardar_grupo">
-
-    <label for="numero">Número:</label><br />
-    <input type="text" id="numero" name="numero" required oninput="verificarGrupo(this.Value)" /><br /><br />
-
-    <label for="nombre">Nombre del Grupo:</label><br />
-    <input type="text" id="nombre" name="nombre" required /><br /><br />
-
-    <label for="distrito">Nro. Distrito</label><br />
-    <input type="number" id="distrito" name="distrito" required /><br /><br />
-
-    <label for="zona">Nro. Zona</label><br />
-    <input type="number" id="zona" name="zona" required /><br /><br />
-
-    <br /><br />
-
-    <button type="submit">💾 Guardar</button>
-    <button type="button" onclick="irHome()">Cancelar</button>
-  </form>
-
-  <div id="popup" style="display: none; border: 1px solid #999; padding: 15px; background: #eee; margin-top: 20px;">
-    <p>🎉 Grupo creado correctamente.</p>
-    <button onclick="cargarOtra()">Cargar Otro</button>
-    <button onclick="irHome()">Terminar</button>
   </div>
-</div>
 
-<script>
+  <div class="formulario">
+    <form id="form-funcion" method="POST" action="{{ url_for('admin.guardar_grupo') }}">
+      <label for="numero">Número:</label>
+      <input type="text" id="numero" name="numero" required oninput="verificarGrupo(this.value)" />
+      <div id="mensaje_grupo" class="mensaje-validacion"></div>
+
+      <label for="nombre">Nombre del Grupo:</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="distrito">Nro. Distrito:</label>
+      <input type="number" id="distrito" name="distrito" required />
+
+      <label for="zona">Nro. Zona:</label>
+      <input type="number" id="zona" name="zona" required />
+
+      <button type="submit" id="btn_guardar">💾 Guardar</button>
+      <button type="button" onclick="irHome()">Cancelar</button>
+    </form>
+
+    <div id="popup" style="display: none;">
+      <p>🎉 Grupo creado correctamente.</p>
+      <button onclick="cargarOtra()">Cargar Otro</button>
+      <button onclick="irHome()">Terminar</button>
+    </div>
+  </div>
+
+  <script>
     const mensaje = "{{ mensaje | default('') }}";
     if (mensaje === 'ok') {
       document.getElementById('popup').style.display = 'block';
@@ -75,7 +72,7 @@
         return;
       }
 
-      fetch(`/existe_grupo/${encodeURIComponent(nombre)}`)
+      fetch(`/admin/existe_grupo/${encodeURIComponent(nombre)}`)
         .then(res => res.json())
         .then(data => {
           const msg = document.getElementById("mensaje_grupo");
@@ -91,12 +88,11 @@
     }
 
     function cargarOtra() {
-      window.location.href = '/nvo_grupo';
+      window.location.href = "{{ url_for('admin.nvo_grupo') }}";
     }
 
     function irHome() {
-      window.location.href = '/home';
+      window.location.href = "{{ url_for('admin.home') }}";
     }
   </script>
-
 {% endblock %}

@@ -1,59 +1,59 @@
 <!-- templates/usuarios-->
-{% extends 'base.html' %} {% block titulo %}Usuarios{% endblock %} {% block
-extra_css %}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='css/admin.css') }}"
-/>
-{% endblock %} {% block encabezado %} 👥 Usuarios en tu grupo {% endblock %} {%
+{% extends 'base.html' %} {% block titulo %}Usuarios{% endblock %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css') }}">
+{% endblock %}
 
-    block contenido %} {% if current_user.super_admin or current_user.rol_usuario ==
-'admin' %}
-<a href="/nvo_usuario">➕ Agregar usuario</a>
-{% else %}
-<a href="#" class="deshabilitado">🔒 Agregar usuario</a>
-{% endif %}
+{% block encabezado %} 👥 Usuarios en tu grupo {% endblock %}
 
-<table>
-  <thead>
-    <tr>
-      <th>DNI</th>
-      <th>Nombre</th>
-      <th>Rol</th>
-      <th>Grupo</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for usuario in lista_usuarios %}
-    <tr>
-      <td>{{ usuario.dni_usuario }}</td>
-      <td>{{ usuario.nombre_usuario }}</td>
-      <td>{{ usuario.rol_usuario }}</td>
-      <td>{{ usuario.grupo_nombre or '—' }}</td>
-      <td>{{ 'Activo' if usuario.estado_usuario else 'Inactivo' }}</td>
-      <td>
-        {% if current_user.super_admin or current_user.rol_usuario == 'admin' %}
-        <a href="/editar_usuario/{{ usuario.id_usuarios }}">✏️</a>
-        <a href="/desactivar_usuario/{{ usuario.id_usuarios }}">🗑️</a>
-        {% else %}
-        <span class="deshabilitado">✏️</span>
-        <span class="deshabilitado">🗑️</span>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% block content %} 
+  {% if current_user.super_admin or current_user.rol_usuario =='admin' %}
+    <a href="/nvo_usuario">➕ Agregar usuario</a>
+  {% else %}
+    <a href="#" class="deshabilitado">🔒 Agregar usuario</a>
+  {% endif %}
+  
+  <table>
+    <thead>
+      <tr>
+        <th>DNI</th>
+        <th>Nombre</th>
+        <th>Rol</th>
+        <th>Grupo</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for usuario in lista_usuarios %}
+      <tr>
+        <td>{{ usuario.dni_usuario }}</td>
+        <td>{{ usuario.nombre_usuario }}</td>
+        <td>{{ usuario.rol_usuario }}</td>
+        <td>{{ usuario.grupo_nombre or '—' }}</td>
+        <td>{{ 'Activo' if usuario.estado_usuario else 'Inactivo' }}</td>
+        <td>
+          {% if current_user.super_admin or current_user.rol_usuario == 'admin' %}
+          <a href="/editar_usuario/{{ usuario.id_usuarios }}">✏️</a>
+          <a href="/desactivar_usuario/{{ usuario.id_usuarios }}">🗑️</a>
+          {% else %}
+          <span class="deshabilitado">✏️</span>
+          <span class="deshabilitado">🗑️</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-    <button type="button" onclick="irHome()">Cancelar</button>
-    
-    <!-- Script para manejar la navegación y volver al home-->
-    <script>
-        function irHome() {
-        window.location.href = '/home';
-        }
-    </script>
-    
+      <button type="button" onclick="irHome()">Cancelar</button>
+      
+      <!-- Script para manejar la navegación y volver al home-->
+      <script>
+          function irHome() {
+          window.location.href = '/home';
+          }
+      </script>
+      
 {% endblock %}
