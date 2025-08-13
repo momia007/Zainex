@@ -1,6 +1,7 @@
 
 from flask import Flask
 from flask_login import LoginManager
+from app.utils.validar_archivo import validar_archivo
 from app.routes.auth import auth_bp
 from app.routes.admin import admin_bp
 from app.models.usuario import Usuario  # O el nombre de tu clase/modelo

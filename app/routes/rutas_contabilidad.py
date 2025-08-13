@@ -6,6 +6,8 @@ especialmente aquellas vinculadas a funciones contables como libro caja,
 resúmenes financieros, e historial económico. Se asocia al blueprint `admin_bp`.
 """
 
+import cloudinary
+from app.utils.validar_archivo import validar_archivo  # ← Importar el módulo
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 import pymysql
@@ -90,14 +92,30 @@ def libro_caja():
 
 
 
-
 @admin_bp.route('/nvo_movimiento', methods=['GET', 'POST'])
 @login_required
 def nvo_movimiento():
-    """ Vista para registrar un nuevo movimiento contable (ingreso o egreso).
-    Recoge datos desde el formulario y los inserta en la tabla `movimientos`."""
     if request.method == 'POST':
         datos = request.form
+        archivo = request.files.get('archivo_comprob')
+        url_comprob = None
+
+        es_valido, _ = validar_archivo(archivo)
+
+        if es_valido:
+            try:
+                resultado = cloudinary.uploader.upload(
+                    archivo,
+                    folder='comprobantes_zainex'
+                )
+                url_comprob = resultado.get('secure_url')
+                print("Archivo subido a Cloudinary:", url_comprob)
+            except Exception as e:
+                print("Error al subir a Cloudinary:", e)
+                url_comprob = None
+        else:
+            print("Archivo no válido o vacío")
+
         conn = conectar_db()
         try:
             with conn.cursor() as cursor:
@@ -113,16 +131,16 @@ def nvo_movimiento():
                     datos.get('detalle_mov'),
                     datos.get('rubro_mov'),
                     datos.get('comprobante_mov'),
-                    datos.get('url_comprob_mov'),
+                    url_comprob,
                     datos.get('importe_mov'),
-                    current_user.id,  # ← trazabilidad
+                    current_user.id,
                     datos.get('observaciones_mov')
                 ))
                 conn.commit()
                 flash('Movimiento registrado exitosamente', 'success')
         finally:
             conn.close()
+
         return redirect(url_for('admin.libro_caja'))
 
-    # Si entra por GET, muestra el formulario vacío
     return render_template('nvo_movimiento.html')

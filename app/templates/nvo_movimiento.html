@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-  <form method="POST">
+  <form method="POST" action="{{ url_for('admin.nvo_movimiento') }}" enctype="multipart/form-data">
     <label>Tipo:</label>
     <select name="tipo_mov" required>
       <option value="">Seleccionar</option>
@@ -52,8 +52,8 @@
     <label>N° de comprobante:</label>
     <input type="text" name="comprobante_mov" maxlength="50">
 
-    <label>Link del comprobante (imagen / archivo):</label>
-    <input type="url" name="url_comprob_mov" placeholder="https://...">
+    <label>Adjuntar comprobante (imagen / PDF):</label>
+    <input type="file" name="archivo_comprob" accept="image/*,.pdf" capture="environment">
 
     <label>Importe:</label>
     <input type="number" name="importe_mov" step="0.01" required>

@@ -46,17 +46,19 @@
 
           <tr>
             <td data-label="Fecha">{{ mov.fecha_mov.strftime('%d/%m/%Y') }}</td>
-            <td data-label="Detalle">{{ mov.detalle_mov }}</td>
+            <td data-label="Detalle">
+              <span {% if mov.observaciones_mov %}title="{{ mov.observaciones_mov }}"{% endif %}>
+                {{ mov.detalle_mov }}
+              </span>
+            </td>
             <td data-label="Rubro">{{ mov.rubro_mov }}</td>
-            <td>
-              {% if mov.conciliado_mov %}
-                ✅ <a href="#" onclick="mostrarDetalles(JSON.parse('{{ mov | tojson | safe }}'))">
+            <td data-label="Comprobante">
+              {% if mov.url_comprob_mov %}
+                <a href="{{ mov.url_comprob_mov }}" target="_blank">
                   {{ mov.comprobante_mov }}
                 </a>
               {% else %}
-                 <a href="#" onclick="mostrarDetalles(JSON.parse('{{ mov | tojson | safe }}'))">
-                   {{ mov.comprobante_mov or '—' }}
-                </a>
+                {{ mov.comprobante_mov or '—' }}
               {% endif %}
             </td>
             <td data-label="Crédito" style="color:green;">{{ moneda.formato_monto(credito) }}</td>
@@ -91,13 +93,25 @@
   <script>
     function mostrarDetalles(mov) {
       const contenedor = document.getElementById('datos-movimiento');
+      let comprobanteHTML = mov.comprobante_mov;
+
+      // Si hay URL y es imagen, mostrar miniatura
+      if (mov.url_comprob_mov) {
+        const esImagen = /\.(jpg|jpeg|png|gif)$/i.test(mov.url_comprob_mov);
+        if (esImagen) {
+          comprobanteHTML += `<br><img src="${mov.url_comprob_mov}" alt="Comprobante" style="max-width: 100%; margin-top: 8px;">`;
+        } else {
+          comprobanteHTML += `<br><a href="${mov.url_comprob_mov}" target="_blank">📄 Ver archivo</a>`;
+        }
+      }
+
       contenedor.innerHTML = `
         <li><strong>Fecha:</strong> ${mov.fecha_mov}</li>
         <li><strong>Detalle:</strong> ${mov.detalle_mov}</li>
         <li><strong>Rubro:</strong> ${mov.rubro_mov}</li>
         <li><strong>Tipo:</strong> ${mov.tipo_mov}</li>
         <li><strong>Importe:</strong> $${parseFloat(mov.importe_mov).toFixed(2)}</li>
-        <li><strong>Comprobante:</strong> ${mov.comprobante_mov}</li>
+        <li><strong>Comprobante:</strong> ${comprobanteHTML}</li>
         <li><strong>Conciliado:</strong> ${mov.conciliado_mov == 1 ? 'Sí' : 'No'}</li>
         <li><strong>Observaciones:</strong> ${mov.observaciones_mov || '—'}</li>
       `;
