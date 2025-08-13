@@ -7,6 +7,7 @@ resúmenes financieros, e historial económico. Se asocia al blueprint `admin_bp
 """
 
 import cloudinary
+import mimetypes
 from app.utils.validar_archivo import validar_archivo  # ← Importar el módulo
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
@@ -104,17 +105,28 @@ def nvo_movimiento():
 
         if es_valido:
             try:
-                resultado = cloudinary.uploader.upload(
-                    archivo,
-                    folder='comprobantes_zainex'
-                )
+                # Detectar el tipo MIME del archivo
+                tipo_mime, _ = mimetypes.guess_type(archivo.filename)
+                es_pdf = tipo_mime == 'application/pdf'
+
+                # Configurar el tipo de recurso según el tipo de archivo
+                opciones_upload = {
+                    'folder': 'comprobantes_zainex'
+                }
+
+                if es_pdf:
+                    opciones_upload['resource_type'] = 'raw'
+
+                resultado = cloudinary.uploader.upload(archivo, **opciones_upload)
                 url_comprob = resultado.get('secure_url')
                 print("Archivo subido a Cloudinary:", url_comprob)
+
             except Exception as e:
                 print("Error al subir a Cloudinary:", e)
                 url_comprob = None
         else:
             print("Archivo no válido o vacío")
+
 
         conn = conectar_db()
         try:
