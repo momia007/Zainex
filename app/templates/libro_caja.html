@@ -54,9 +54,13 @@
             <td data-label="Rubro">{{ mov.rubro_mov }}</td>
             <td data-label="Comprobante">
               {% if mov.url_comprob_mov %}
-                <a href="{{ mov.url_comprob_mov }}" target="_blank">
-                  {{ mov.comprobante_mov }}
-                </a>
+                {% if mov.url_comprob_mov.endswith('.pdf') %}
+                  <a href="{{ mov.url_comprob_mov }}" target="_blank">📄 PDF</a>
+                {% else %}
+                  <a href="{{ mov.url_comprob_mov }}" target="_blank">
+                    <img src="{{ mov.url_comprob_mov }}" alt="Comprobante" style="max-height: 40px;">
+                  </a>
+                {% endif %}
               {% else %}
                 {{ mov.comprobante_mov or '—' }}
               {% endif %}
@@ -98,12 +102,17 @@
       // Si hay URL y es imagen, mostrar miniatura
       if (mov.url_comprob_mov) {
         const esImagen = /\.(jpg|jpeg|png|gif)$/i.test(mov.url_comprob_mov);
+        const esPDF = /\.pdf$/i.test(mov.url_comprob_mov);
+
         if (esImagen) {
           comprobanteHTML += `<br><img src="${mov.url_comprob_mov}" alt="Comprobante" style="max-width: 100%; margin-top: 8px;">`;
+        } else if (esPDF) {
+          comprobanteHTML += `<br><iframe src="${mov.url_comprob_mov}" width="100%" height="400px" style="margin-top: 8px;"></iframe>`;
         } else {
           comprobanteHTML += `<br><a href="${mov.url_comprob_mov}" target="_blank">📄 Ver archivo</a>`;
         }
       }
+
 
       contenedor.innerHTML = `
         <li><strong>Fecha:</strong> ${mov.fecha_mov}</li>

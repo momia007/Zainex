@@ -1,3 +1,9 @@
+clave Naty
+Naty2025
+scrypt:32768:8:1$uieI20cdK4FtCzvx$3c728f5a45e775efdca21c3741dd73d1a59db21729b24eedf5e41f0897cb02a8f658c8cbcbd513f69ae271af1c86bb7fbcbbaa168e39ddb5111626766957719f
+
+
+
 📦 Checklist rápido para agregar una pagina y que este disponible
 
 [x] ¿El archivo XXXXXXXX.html está en templates/? 
