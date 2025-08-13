@@ -30,3 +30,29 @@ Código	Significado	Descripción breve
 Código	Significado	Descripción breve
 500 Internal Server Error	Error interno	Algo falló en el backend
 503 Service Unavailable	No disponible	El servidor está sobrecargado o en mantenimiento
+
+*************************
+SUBIR AL MAIN DE HITHUB
+*************************
+
+🔍 Paso 0: verificar el estado actual del repo locales
+bash
+git status
+
+🧱 PASO 1: Agregar todos los cambios al staging
+bash
+git add .
+Esto incluye tanto los archivos modificados como los nuevos sin seguimiento.
+
+📝 PASO 2: Crear un commit con mensaje descriptivo
+bash
+git commit -m "Actualizo lógica contable, estilos y validación de archivos"
+Podés ajustar el mensaje según lo que hiciste. Lo importante es que sea claro para vos y tu equipo futuro 😄.
+
+🚀 PASO 3: Subir los cambios al repositorio remoto
+bash
+git push origin main
+Esto envía tu commit a la rama main en GitHub.
+
+✅ Resultado
+Tu repositorio remoto queda actualizado con todos los cambios locales. Podés ir a GitHub y ver el nuevo commit reflejado.
