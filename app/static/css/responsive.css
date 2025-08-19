@@ -1,6 +1,6 @@
 /* responsive.css — estilos adaptativos para todas las vistas de Zainex */
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 600px) {
   /* === Estructura general === */
   body {
     padding: 0.5em;
@@ -163,4 +163,23 @@
   .espaciado {
     margin-bottom: 1em;
   }
+
+  /* Estilos específicos para el formulario de inicio de sesión en móviles */
+  form#loginForm {
+    max-width: 90vw;         /* Usa el 90% del ancho visible */
+    padding: 20px;           /* Menos padding para no achicar el contenido */
+  }
+
+  form#loginForm input,
+  form#loginForm button {
+    font-size: 1.2em;        /* Texto más grande para mejor legibilidad */
+    padding: 16px;           /* Más alto para que se vea cómodo al tacto */
+  }
+
+  h2 {
+    font-size: 2em;          /* Título más grande en móviles */
+  }
 }
+
+
+
