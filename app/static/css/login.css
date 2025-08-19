@@ -1,63 +1,71 @@
-form#loginForm {
-  max-width: 80%;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-form#loginForm label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-form#loginForm input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-form#loginForm button {
-  width: 100%;
-  padding: 10px;
-  background-color: #0077cc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-form#loginForm button:hover {
-  background-color: #005fa3;
-}
-
-#resultado {
-  text-align: center;
-  font-weight: bold;
-}
-
+/* Contenedor principal */
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 20px;
 }
 
-form{
-  width: 100%;
-  max-width: none;
-  margin: auto;
-}
-
+/* Título */
 h2 {
   text-align: center;
   margin-bottom: 20px;
+  font-size: 1.8em;
+}
+
+/* Formulario */
+form#loginForm {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 25px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Etiquetas */
+form#loginForm label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+/* Campos de entrada */
+form#loginForm input {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* Botón */
+form#loginForm button {
+  width: 100%;
+  padding: 14px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+form#loginForm button:hover {
+  background-color: #005fa3;
+}
+
+/* Resultado */
+#resultado {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20px;
+  font-size: 1.1em;
 }
