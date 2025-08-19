@@ -11,11 +11,11 @@
 {% endblock %}
 
 {% block encabezado %}
-  {{ current_user.nombre }} estás viendo el estado contable 📊
+  Estado contable 📊
 {% endblock %}
 
 {% block content %}
-  <h2>📖 Registro contable</h2>
+  <h2>📖 Registros</h2>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -24,6 +24,10 @@
       {% endfor %}
     {% endif %}
   {% endwith %}
+
+  <button onclick="window.location.href='/nvo_movimiento'">➕ Registrar Movimiento</button>
+  <button onclick="window.location.href='/conciliar'">🔄 Conciliación Bancaria</button>
+  <button onclick="irHome()">Cancelar</button>
 
   <table class="libro-caja">
     <thead>
