@@ -1,33 +1,59 @@
-/* contabilidad.css — estilos específicos para la vista de contabilidad */
-
-/* === Eliminar viñetas y márgenes de la lista === */
-.link-panel ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
+/* Contenedor principal */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra horizontalmente */
+  justify-content: center;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-/* === Panel de enlaces === */
+/* Panel de enlaces */
 .link-panel {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
+  align-items: center;
+  width: 100%;
+  max-width: 800px; /* Limita el ancho en pantallas grandes */
+  margin: 5em auto; /* Centra el panel */
+  gap: 16px;
 }
 
-/* === Estilo de cada enlace === */
+/* Lista sin viñetas */
+.link-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+/* Cada enlace ocupa todo el ancho disponible */
+.link-panel li {
+  width: 100%;
+  margin: 5em auto;
+}
+
+/* Estilo de cada enlace */
 .link-panel a {
   display: block;
-  padding: 10px 14px;
+  width: 100%;
+  padding: 16px 20px;
   background-color: #e9ecef;
-  border-radius: 6px;
+  border-radius: 8px;
   text-decoration: none;
-  color: #007bff; /* Azul moderno */
+  color: #007bff;
   font-weight: bold;
+  font-size: 3em;
+  text-align: center;
   transition: background-color 0.2s ease;
 }
 
-/* === Hover para enlaces activos === */
+/* Hover */
 .link-panel a:not(.deshabilitado):hover {
   background-color: #d6e0f5;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 5em;
 }

@@ -1,42 +1,71 @@
-/* home.css — estilos específicos para la vista de inicio (home) */
+/* Contenedor principal */
+.container {
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
 
-/* === Encabezado principal === */
-h2 {
-  margin-bottom: 15px;
+/* Encabezado principal */
+h2, .encabezado {
+  text-align: center;
+  font-size: 4em;
+  margin-bottom: 20px;
+  margin-top: 75px;
   color: #2c3e50;
 }
 
-/* === Eliminar viñetas y márgenes de la lista === */
-.link-panel ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-/* === Panel de enlaces === */
+/* Panel de enlaces centrado y ancho completo */
 .link-panel {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
 }
 
-/* === Estilo de cada enlace === */
+/* Lista sin viñetas */
+.link-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+/* Cada ítem ocupa todo el ancho */
+.link-panel li {
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* Enlaces grandes y legibles */
 .link-panel a {
   display: block;
-  padding: 10px 14px;
+  width: 100%;
+  padding: 16px 20px;
   background-color: #e9ecef;
-  border-radius: 6px;
+  border-radius: 8px;
   text-decoration: none;
   color: #007bff;
   font-weight: bold;
+  font-size: 1.8em;
+  text-align: center;
   transition: background-color 0.2s ease;
 }
 
-/* === Hover para enlaces activos === */
+/* Hover */
 .link-panel a:not(.deshabilitado):hover {
   background-color: #d6e0f5;
 }
 
-/* === Enlaces deshabilitados ya están definidos en estilos.css === */
-/* Se respetan los estilos base para .deshabilitado */
+@media (max-width: 1220px) {
+  h2, .encabezado {
+    font-size: 6em;
+  }
+
+  .link-panel a {
+    font-size: 3.5em;
+  }
+
+}

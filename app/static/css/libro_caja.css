@@ -1,5 +1,22 @@
 /* libro_caja.css — estilos específicos para la vista de Libro Caja */
 
+/* Contenedor principal */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+/* Título */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 4em;
+}
+
 /* === Tabla contable === */
 table.libro-caja {
   width: 100%;
@@ -45,7 +62,7 @@ table.libro-caja tbody tr:hover {
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  max-width: 500px;
+  max-width: none;
   border-radius: 8px;
   font-size: 0.95em;
 }
@@ -66,3 +83,50 @@ table.libro-caja tbody tr:hover {
 .modal-contenido li {
   margin: 8px 0;
 }
+
+/* Botonera horizontal */
+.botonera {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.botonera button {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 1.1em;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.botonera button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 1220px) {
+  table.libro-caja th:nth-child(3),  /* Rubro */
+  table.libro-caja td:nth-child(3),
+  table.libro-caja th:nth-child(4),  /* Comprobante */
+  table.libro-caja td:nth-child(4),
+  table.libro-caja th:nth-child(8),  /* Conciliado */
+  table.libro-caja td:nth-child(8) {
+    display: none;
+  }
+  body {
+  font-size: 2em;
+  }
+
+  table.libro-caja th,
+  table.libro-caja td {
+    font-size: 1em;
+  }
+}
+
+

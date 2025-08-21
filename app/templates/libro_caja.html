@@ -9,135 +9,140 @@
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/libro_caja.css') }}">
 {% endblock %}
+<div class="container">
+  {% block encabezado %}
+    <h2>Estado contable 📊</h2>
+  {% endblock %}
 
-{% block encabezado %}
-  Estado contable 📊
-{% endblock %}
+  {% block content %}
 
-{% block content %}
-  <h2>📖 Registros</h2>
-
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-
-  <button onclick="window.location.href='/nvo_movimiento'">➕ Registrar Movimiento</button>
-  <button onclick="window.location.href='/conciliar'">🔄 Conciliación Bancaria</button>
-  <button onclick="irHome()">Cancelar</button>
-
-  <table class="libro-caja">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Detalle</th>
-        <th>Rubro</th>
-        <th>Comprobante</th>
-        <th style="color:green;">Crédito</th>
-        <th style="color:red;">Débito</th>
-        <th>💰 Saldo acumulado</th>
-        <th>Conciliado</th>
-      </tr>
-    </thead>
-
-    <tbody>
-        {% for mov in transacciones %}
-          {% set credito = mov.importe_mov if mov.tipo_mov == 'Ingreso' else 0 %}
-          {% set debito = mov.importe_mov if mov.tipo_mov == 'Egreso' else 0 %}
-
-          <tr>
-            <td data-label="Fecha">{{ mov.fecha_mov.strftime('%d/%m/%Y') }}</td>
-            <td data-label="Detalle">
-              <span {% if mov.observaciones_mov %}title="{{ mov.observaciones_mov }}"{% endif %}>
-                {{ mov.detalle_mov }}
-              </span>
-            </td>
-            <td data-label="Rubro">{{ mov.rubro_mov }}</td>
-            <td data-label="Comprobante">
-              {% if mov.url_comprob_mov %}
-                <a href="{{ mov.url_comprob_mov }}" target="_blank">
-                  {{ mov.comprobante_mov }}
-                </a>
-              {% else %}
-                {{ mov.comprobante_mov or '—' }}
-              {% endif %}
-            </td>
-            <td data-label="Crédito" style="color:green;">{{ moneda.formato_monto(credito) }}</td>
-            <td data-label="Débito" style="color:red;">{{ moneda.formato_monto(debito) }}</td>
-            <td data-label="Saldo"><strong>{{ moneda.formato_monto(mov.saldo_actual) }}</strong></td>
-            <td data-label="Conciliado">
-              {% if mov.conciliado_mov %}
-                ✅
-              {% else %}
-                ❌
-              {% endif %}
-            </td>
-
-          </tr>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
-    </tbody>
-
-  </table>
-
-  <button onclick="window.location.href='/nvo_movimiento'">➕ Registrar Movimiento</button>
-  <button onclick="window.location.href='/conciliar'">🔄 Conciliación Bancaria</button>
-  <button onclick="irHome()">Cancelar</button>
-  <!-- Modal emergente para ver detalles -->
-  <div id="modal-movimiento" class="modal">
-    <div class="modal-contenido">
-      <span class="cerrar" onclick="cerrarModal()">&times;</span>
-      <h3>📄 Detalles del Movimiento</h3>
-      <ul id="datos-movimiento"></ul>
+      {% endif %}
+    {% endwith %}
+    
+    <div class="botonera">
+      <button onclick="window.location.href='/nvo_movimiento'">➕ Registrar Movimiento</button>
+      <button onclick="window.location.href='/conciliar'">🔄 Conciliación Bancaria</button>
+      <button onclick="irHome()">Cancelar</button>
     </div>
-  </div>
 
-  <script>
-    function mostrarDetalles(mov) {
-      const contenedor = document.getElementById('datos-movimiento');
-      let comprobanteHTML = mov.comprobante_mov;
+    <table class="libro-caja">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Detalle</th>
+          <th>Rubro</th>
+          <th>Comprobante</th>
+          <th style="color:green;">Crédito</th>
+          <th style="color:red;">Débito</th>
+          <th>💰 Saldo acumulado</th>
+          <th>Conciliado</th>
+        </tr>
+      </thead>
 
-      // Si hay URL y es imagen, mostrar miniatura
-      if (mov.url_comprob_mov) {
-        const esImagen = /\.(jpg|jpeg|png|gif)$/i.test(mov.url_comprob_mov);
-        const esPDF = /\.pdf$/i.test(mov.url_comprob_mov);
+      <tbody>
+          {% for mov in transacciones %}
+            {% set credito = mov.importe_mov if mov.tipo_mov == 'Ingreso' else 0 %}
+            {% set debito = mov.importe_mov if mov.tipo_mov == 'Egreso' else 0 %}
 
-        if (esPDF) {
-          comprobanteHTML += `<br><a href="${mov.url_comprob_mov}" target="_blank">📄 Ver comprobante PDF</a>`;
-        } else if (esImagen) {
-          comprobanteHTML += `<br><a href="${mov.url_comprob_mov}" target="_blank">🖼️ Ver comprobante imagen</a>`;
-        } else {
-          comprobanteHTML += `<br><em>Tipo de archivo no soportado</em>`;
+            <tr>
+              <td data-label="Fecha">{{ mov.fecha_mov.strftime('%d/%m/%Y') }}</td>
+              <td data-label="Detalle">
+                <span {% if mov.observaciones_mov %}title="{{ mov.observaciones_mov }}"{% endif %}>
+                  {{ mov.detalle_mov }}
+                </span>
+              </td>
+              <td data-label="Rubro">{{ mov.rubro_mov }}</td>
+              <td data-label="Comprobante">
+                {% if mov.url_comprob_mov %}
+                  <a href="{{ mov.url_comprob_mov }}" target="_blank">
+                    {{ mov.comprobante_mov }}
+                  </a>
+                {% else %}
+                  {{ mov.comprobante_mov or '—' }}
+                {% endif %}
+              </td>
+              <td data-label="Crédito" style="color:green;">{{ moneda.formato_monto(credito) }}</td>
+              <td data-label="Débito" style="color:red;">{{ moneda.formato_monto(debito) }}</td>
+              <td data-label="Saldo"><strong>{{ moneda.formato_monto(mov.saldo_actual) }}</strong></td>
+              <td data-label="Conciliado">
+                {% if mov.conciliado_mov %}
+                  ✅
+                {% else %}
+                  ❌
+                {% endif %}
+              </td>
+
+            </tr>
+          {% endfor %}
+      </tbody>
+
+    </table>
+
+    <div class="botonera">
+      <button onclick="window.location.href='/nvo_movimiento'">➕ Registrar Movimiento</button>
+      <button onclick="window.location.href='/conciliar'">🔄 Conciliación Bancaria</button>
+      <button onclick="irHome()">Cancelar</button>
+    </div>
+
+      <!-- Modal emergente para ver detalles -->
+    <div id="modal-movimiento" class="modal">
+      <div class="modal-contenido">
+        <span class="cerrar" onclick="cerrarModal()">&times;</span>
+        <h3>📄 Detalles del Movimiento</h3>
+        <ul id="datos-movimiento"></ul>
+      </div>
+    </div>
+
+    <script>
+      function mostrarDetalles(mov) {
+        const contenedor = document.getElementById('datos-movimiento');
+        let comprobanteHTML = mov.comprobante_mov;
+
+        // Si hay URL y es imagen, mostrar miniatura
+        if (mov.url_comprob_mov) {
+          const esImagen = /\.(jpg|jpeg|png|gif)$/i.test(mov.url_comprob_mov);
+          const esPDF = /\.pdf$/i.test(mov.url_comprob_mov);
+
+          if (esPDF) {
+            comprobanteHTML += `<br><a href="${mov.url_comprob_mov}" target="_blank">📄 Ver comprobante PDF</a>`;
+          } else if (esImagen) {
+            comprobanteHTML += `<br><a href="${mov.url_comprob_mov}" target="_blank">🖼️ Ver comprobante imagen</a>`;
+          } else {
+            comprobanteHTML += `<br><em>Tipo de archivo no soportado</em>`;
+          }
+        }
+        contenedor.innerHTML = `
+          <li><strong>Fecha:</strong> ${mov.fecha_mov}</li>
+          <li><strong>Detalle:</strong> ${mov.detalle_mov}</li>
+          <li><strong>Rubro:</strong> ${mov.rubro_mov}</li>
+          <li><strong>Tipo:</strong> ${mov.tipo_mov}</li>
+          <li><strong>Importe:</strong> $${parseFloat(mov.importe_mov).toFixed(2)}</li>
+          <li><strong>Comprobante:</strong> ${comprobanteHTML}</li>
+          <li><strong>Conciliado:</strong> ${mov.conciliado_mov == 1 ? 'Sí' : 'No'}</li>
+          <li><strong>Observaciones:</strong> ${mov.observaciones_mov || '—'}</li>
+        `;
+        document.getElementById('modal-movimiento').style.display = 'block';
+      }
+
+      function cerrarModal() {
+        document.getElementById('modal-movimiento').style.display = 'none';
+      }
+
+      window.onclick = function(event) {
+        const modal = document.getElementById('modal-movimiento');
+        if (event.target == modal) {
+          cerrarModal();
         }
       }
-      contenedor.innerHTML = `
-        <li><strong>Fecha:</strong> ${mov.fecha_mov}</li>
-        <li><strong>Detalle:</strong> ${mov.detalle_mov}</li>
-        <li><strong>Rubro:</strong> ${mov.rubro_mov}</li>
-        <li><strong>Tipo:</strong> ${mov.tipo_mov}</li>
-        <li><strong>Importe:</strong> $${parseFloat(mov.importe_mov).toFixed(2)}</li>
-        <li><strong>Comprobante:</strong> ${comprobanteHTML}</li>
-        <li><strong>Conciliado:</strong> ${mov.conciliado_mov == 1 ? 'Sí' : 'No'}</li>
-        <li><strong>Observaciones:</strong> ${mov.observaciones_mov || '—'}</li>
-      `;
-      document.getElementById('modal-movimiento').style.display = 'block';
-    }
 
-    function cerrarModal() {
-      document.getElementById('modal-movimiento').style.display = 'none';
-    }
-
-    window.onclick = function(event) {
-      const modal = document.getElementById('modal-movimiento');
-      if (event.target == modal) {
-        cerrarModal();
+      function irHome() {
+        window.location.href = '/home';
       }
-    }
-
-    function irHome() {
-      window.location.href = '/home';
-    }
-  </script>
-{% endblock %}
+    </script>
+  {% endblock %}
+</div>
