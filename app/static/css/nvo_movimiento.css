@@ -1,56 +1,92 @@
 /* nvo_movimiento.css — estilos específicos para el formulario de movimientos contables */
 
-/* === Contenedor del formulario === */
-form {
-  max-width: 650px;
-  margin: auto;
-  padding: 1.5em;
-  background-color: #fdfdfd;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-/* === Etiquetas === */
-label {
-  font-weight: bold;
-  display: block;
-  margin-top: 1em;
-}
-
-/* === Campos de entrada === */
-input[type="text"],
-input[type="date"],
-input[type="url"],
-input[type="number"],
-select,
-textarea {
+/* Contenedor principal */
+.container {
   width: 100%;
-  padding: 0.6em;
-  margin-top: 0.3em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1em;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 20px;
   box-sizing: border-box;
 }
 
-/* === Textarea === */
-textarea {
-  resize: vertical;
+/* Formulario centrado y ancho completo */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  font-size: 2em;
 }
 
-/* === Botones === */
-button {
-  margin-top: 2em;
-  margin-right: 0.8em;
-  padding: 0.6em 1.2em;
+/* Etiquetas */
+form label {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+/* Inputs y selects */
+form input,
+form select,
+form textarea {
+  padding: 10px 12px;
   font-size: 1em;
-  background-color: #007bff;
-  color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botones */
+form button {
+  padding: 14px 20px;
+  font-size: 1.1em;
+  font-weight: bold;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-button:hover {
+form button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+form button[type="submit"]:hover {
   background-color: #0056b3;
+}
+
+form button[type="button"] {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+form button[type="button"]:hover {
+  background-color: #ddd;
+}
+/* Encabezado */
+.encabezado {
+  font-size: 4em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+@media screen and (max-width: 1220px) {
+  /* Ajustes para pantallas pequeñas */
+
+  form{
+    font-size: 3em;
+    gap: 40px;
+  }
+  /* Etiquetas */
+  form label {
+    font-weight: normal;
+    font-size: 1.2em;
+  }
 }
