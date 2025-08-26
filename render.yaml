@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: scout-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: DEBUG
+        value: False
+      - key: DB_HOST
+        value: scout-db
+      - key: DB_USER
+        value: root
+      - key: DB_PASSWORD
+        value: aGhe/u4i
+      - key: DB_NAME
+        value: zainex_scout
+      - key: DB_PORT
+        value: 3306
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dqgvyrstu
+      - key: CLOUDINARY_API_KEY
+        value: 387335684694429
+      - key: CLOUDINARY_API_SECRET
+        value: vp-r09SOHBEUSbEnTIVUJ54rGts
+
+  - type: pserv
+    name: scout-db
+    env: docker
+    dockerfilePath: ./Dockerfile
+    ports:
+      - port: 3306

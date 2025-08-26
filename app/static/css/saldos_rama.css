@@ -1,0 +1,154 @@
+/* saldos_ramas.css — estilos específicos para la vista de Saldos de ramas */
+
+/* === Contenedor principal === */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* === Títulos y texto === */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 3.5em;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 2em;
+}
+
+p {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1em;
+}
+
+/* === Selectores de rama y año === */
+.selectores {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 60px; /* 👈 espacio entre rama y año */
+  margin-bottom: 40px; /* 👈 espacio antes de los botones */
+}
+
+.selector-pequeño {
+  width: 160px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* === Botonera === */
+.botonera {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto 80px auto;
+  width: fit-content;
+  flex-wrap: wrap;
+}
+
+.botonera button {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 1.1em;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.botonera button:hover {
+  background-color: #0056b3;
+}
+
+/* === Tabla contable === */
+table.libro-caja {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+  font-size: 0.95em;
+}
+
+table.libro-caja th,
+table.libro-caja td {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+table.libro-caja thead {
+  background-color: #f1f1f1;
+}
+
+table.libro-caja tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table.libro-caja tbody tr:hover {
+  background-color: #e8f3ff;
+}
+
+/* === Modal (si se usa en otras vistas) === */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 60px;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-contenido {
+  background-color: #fff;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  border-radius: 8px;
+  font-size: 3em;
+}
+
+.cerrar {
+  color: #666;
+  float: right;
+  font-size: 26px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-contenido ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.modal-contenido li {
+  margin: 8px 0;
+}
+
+/* === Responsivo === */
+@media (max-width: 1220px) {
+  body {
+    font-size: 2em;
+  }
+
+  table.libro-caja th,
+  table.libro-caja td {
+    font-size: 1em;
+  }
+}

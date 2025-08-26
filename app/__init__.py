@@ -4,6 +4,7 @@ from flask_login import LoginManager
 from app.utils.validar_archivo import validar_archivo
 from app.routes.auth import auth_bp
 from app.routes.admin import admin_bp
+from app.routes.rutas_contabilidad import contabilidad_bp
 from app.models.usuario import Usuario  # O el nombre de tu clase/modelo
 from app.routes.rutas_miembros import miembros_bp # Importa el blueprint de miembros
 from app.routes import rutas_home # Importa las rutas del home
@@ -13,6 +14,7 @@ from app.routes import rutas_contabilidad # Importa las rutas de contabilidad
 def create_app():
     app = Flask(__name__) # Crea la instancia de Flask
     app.register_blueprint(miembros_bp) # Registra el blueprint de miembros
+    app.register_blueprint(contabilidad_bp) # Registra el blueprint de contabilidad
 
 
     login_manager = LoginManager()

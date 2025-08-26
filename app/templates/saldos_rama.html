@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% import 'partials/moneda_arg.html' as moneda %}
+
+{% block titulo %}
+  Saldos por Rama
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/saldos_rama.css') }}">
+{% endblock %}
+
+{% block encabezado %}
+  <h1 class="encabezado">🏷️ Saldos por Rama</h1>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <!-- Formulario para seleccionar rama -->
+    <form method="POST" action="{{ url_for('contabilidad.saldos_rama') }}">
+      <div class="selectores">
+        <label for="rama_id">Seleccioná una rama:</label>
+        <select name="rama_id" id="rama_id" class="selector-pequeño" required>
+          {% for rama in ramas %}
+            <option value="{{ rama.id }}" {% if rama_seleccionada and rama.id == rama_seleccionada.id %}selected{% endif %}>
+              {{ rama.nombre }}
+            </option>
+          {% endfor %}
+        </select>
+
+        <label for="año">Año:</label>
+        <select name="año" id="año" class="selector-pequeño" required>
+          {% for año in range(2020, 2026) %}
+            <option value="{{ año }}" {% if año_seleccionado == año %}selected{% endif %}>{{ año }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class ="botonera">
+        <button type="submit">Consultar</button>
+        <button type="button" onclick="window.location.href='/contabilidad'">Cancelar</button>
+      </div>  
+    </form>
+
+    {% if error %}
+      <div class="alerta-error">
+        ⚠️ {{ error }}
+      </div>
+    {% endif %}
+
+
+    {% if rama_seleccionada %}
+      <!-- Mostrar saldo libre disponible -->
+      <h2>💰 Saldo libre disponible para la rama {{ rama_seleccionada.nombre }} en {{ año_seleccionado }}</h2>
+      <h2><strong>{{ moneda.formato_monto(saldo_libre) }}</strong></h2>
+      <p>({{ porcentaje }}% de ingresos por cuotas menos gastos)</p>
+
+      <!-- Tabla de movimientos filtrados -->
+      <h3>📋 Movimientos registrados</h3>
+      {% if movimientos %}
+        <table class="libro-caja">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Rubro</th>
+              <th>Importe</th>
+              <th>Detalle</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for mov in movimientos %}
+              <tr>
+                <td>{{ mov.fecha_mov.strftime('%d/%m/%Y') }}</td>
+                <td>{{ mov.tipo_mov }}</td>
+                <td>{{ mov.rubro_mov }}</td>
+                <td>{{ moneda.formato_monto(mov.importe_mov) }}</td>
+                <td>{{ mov.detalle_mov }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No se encontraron movimientos para los filtros seleccionados.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}

@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 
-load_dotenv()
+env_file = ".env.production" if os.getenv("FLASK_ENV") == "production" else ".env"
+load_dotenv(env_file)
 
 DB_HOST = os.getenv('DB_HOST')
 DB_USER = os.getenv('DB_USER')
@@ -12,9 +13,9 @@ DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_NAME = os.getenv('DB_NAME')
 DB_PORT = int(os.getenv('DB_PORT'))  # ¡Ojo! Convierte el puerto a int
 
-CLOUDINARY_CLOUD_NAME = 'dqgvyrstu'
-CLOUDINARY_API_KEY = '387335684694429'
-CLOUDINARY_API_SECRET = 'vp-r09SOHBEUSbEnTIVUJ54rGts'
+CLOUDINARY_CLOUD_NAME = os.getenv('CLOUDINARY_CLOUD_NAME')
+CLOUDINARY_API_KEY = os.getenv('CLOUDINARY_API_KEY')
+CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET')
 
 def conectar_db():
     return pymysql.connect(

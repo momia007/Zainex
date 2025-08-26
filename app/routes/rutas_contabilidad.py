@@ -14,6 +14,9 @@ from flask_login import login_required, current_user
 import pymysql
 from app.routes.admin import admin_bp  # ← ajustá esto según dónde definas el blueprint
 from app.config import conectar_db
+from flask import Blueprint, render_template, request
+from app.models.movimientos import Movimiento
+from app.models.ramas import Rama 
 
 @admin_bp.route('/libro_caja')
 @login_required
@@ -156,3 +159,66 @@ def nvo_movimiento():
         return redirect(url_for('admin.libro_caja'))
 
     return render_template('nvo_movimiento.html')
+
+
+
+contabilidad_bp = Blueprint('contabilidad', __name__, url_prefix='/contabilidad')
+
+@contabilidad_bp.route('/saldos_rama', methods=['GET', 'POST'])
+def saldos_rama():
+    ramas = Rama.listar_todas()
+    movimientos_filtrados = []
+    rama_seleccionada = None
+    saldo_libre = None
+    porcentaje = None
+    año_seleccionado = None
+
+    if request.method == 'POST':
+        # 👇 Acá va el bloque que estás preguntando
+        rama_id_raw = request.form.get('rama_id')
+        año_raw = request.form.get('año')
+        print("Datos recibidos:", rama_id_raw, año_raw)
+
+        try:
+            rama_id = int(rama_id_raw)
+            año_seleccionado = int(año_raw)
+        except Exception as e:
+            print("Error al convertir rama_id o año:", e)
+            return render_template('saldos_rama.html',
+                                   ramas=ramas,
+                                   movimientos=[],
+                                   error="Datos inválidos en el formulario.")
+
+        # 👇 Continúa el flujo normal
+        rama_seleccionada = Rama.obtener_por_id(rama_id)
+        if not rama_seleccionada:
+            print(f"⚠️ No se encontró la rama con ID: {rama_id}")
+            return render_template('saldos_rama.html',
+                                ramas=ramas,
+                                movimientos=[],
+                                rama_seleccionada=None,
+                                saldo_libre=None,
+                                porcentaje=None,
+                                año_seleccionado=año_seleccionado,
+                                error="La rama seleccionada no existe.")
+
+
+        movimientos_filtrados = Movimiento.obtener_por_rama_y_año(rama_id, año_seleccionado)
+        total_ingresos = Movimiento.calcular_ingresos_por_cuotas(rama_id, año_seleccionado)
+        total_gastos = Movimiento.calcular_egresos(rama_id, año_seleccionado)
+
+        total_ingresos = total_ingresos or 0
+        total_gastos = total_gastos or 0
+
+        porcentaje = rama_seleccionada.porcentaje_libre or 10
+        saldo_libre = round((total_ingresos * porcentaje / 100) - total_gastos, 2)
+        print(f"Movimientos encontrados para rama {rama_id} en {año_seleccionado}: {len(movimientos_filtrados)}")
+
+
+    return render_template('saldos_rama.html',
+                           ramas=ramas,
+                           movimientos=movimientos_filtrados,
+                           rama_seleccionada=rama_seleccionada,
+                           saldo_libre=saldo_libre,
+                           porcentaje=porcentaje,
+                           año_seleccionado=año_seleccionado)
