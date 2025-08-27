@@ -12,3 +12,6 @@ EXPOSE 3306
 
 # Volumen para persistencia de datos
 VOLUME ["/var/lib/mysql"]
+
+# Copia el script SQL para inicializar la base de datos
+COPY estructura.sql /docker-entrypoint-initdb.d/
