@@ -58,6 +58,14 @@
       <label>Importe:</label>
       <input type="number" name="importe_mov" step="0.01" required>
 
+      <label>Destino del movimiento:</label>
+      <select name="rama_id" required>
+          {% for rama in ramas %}
+            <option value="{{ rama.id }}" {% if rama.id == 5 %}selected{% endif %}>
+              {{ rama.nombre }}
+            </option>
+          {% endfor %}
+      </select>
       <label>Observaciones:</label>
       <textarea name="observaciones_mov" rows="3" placeholder="Detalles adicionales..."></textarea>
 

@@ -1,7 +1,9 @@
 
 from flask import Flask
+from app.config import Config
 from flask_login import LoginManager
 from app.utils.validar_archivo import validar_archivo
+from app.extensions import db  # ← Importás desde extensions
 from app.routes.auth import auth_bp
 from app.routes.admin import admin_bp
 from app.routes.rutas_contabilidad import contabilidad_bp
@@ -12,14 +14,12 @@ from app.routes import rutas_contabilidad # Importa las rutas de contabilidad
 
 
 def create_app():
-    app = Flask(__name__) # Crea la instancia de Flask
-    app.register_blueprint(miembros_bp) # Registra el blueprint de miembros
-    app.register_blueprint(contabilidad_bp) # Registra el blueprint de contabilidad
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
+    db.init_app(app)
 
     login_manager = LoginManager()
-    # Redirige a la vista de login si no está autenticado
-    login_manager.login_view = 'auth.mostrar_loguin'
     login_manager.init_app(app)
 
     @login_manager.user_loader
@@ -33,5 +33,8 @@ def create_app():
     # Registro de blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
-
+    app.register_blueprint(contabilidad_bp)
     return app
+
+
+

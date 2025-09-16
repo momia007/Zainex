@@ -21,18 +21,22 @@
         <label for="rama_id">Seleccioná una rama:</label>
         <select name="rama_id" id="rama_id" class="selector-pequeño" required>
           {% for rama in ramas %}
-            <option value="{{ rama.id }}" {% if rama_seleccionada and rama.id == rama_seleccionada.id %}selected{% endif %}>
-              {{ rama.nombre }}
-            </option>
+            {% if rama.id != 5 %}
+              <option value="{{ rama.id }}" {% if rama_seleccionada and rama.id == rama_seleccionada.id %}selected{% endif %}>
+                {{ rama.nombre }}
+              </option>
+            {% endif %}
           {% endfor %}
         </select>
 
+
         <label for="año">Año:</label>
         <select name="año" id="año" class="selector-pequeño" required>
-          {% for año in range(2020, 2026) %}
+          {% for año in años %}
             <option value="{{ año }}" {% if año_seleccionado == año %}selected{% endif %}>{{ año }}</option>
           {% endfor %}
         </select>
+
       </div>
       <div class ="botonera">
         <button type="submit">Consultar</button>

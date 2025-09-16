@@ -62,3 +62,14 @@ Esto envía tu commit a la rama main en GitHub.
 
 ✅ Resultado
 Tu repositorio remoto queda actualizado con todos los cambios locales. Podés ir a GitHub y ver el nuevo commit reflejado.
+
+*************************************
+LEVANTAR LA BASE DE DATOS PostgreSQL
+*************************************
+
+🔧 1. Verificar que PostgreSQL esté corriendo
+Podés usar:
+sudo systemctl status postgresql
+
+Si no está activo, lo levantás con:
+sudo systemctl start postgresql

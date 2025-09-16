@@ -1,30 +1,33 @@
 # ░▒▓ utils/current_user.py ▓▒░
-from app.config import conectar_db
 from flask_login import current_user
-import pymysql
+from app.models.usuario import Usuario
+from app.models.grupo import Grupo
 
 def get_contexto_usuario_actual():
     if current_user.rol_usuario not in ['admin', 'colaborador']:
         return None
 
-    conn = conectar_db()
-    try:
-        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute("""
-                SELECT
-                    u.id_usuarios,
-                    u.nombre_usuario,
-                    u.apellido_usuario,
-                    u.dni_usuario,
-                    u.rol_usuario,
-                    g.id_grupo,
-                    g.num_grupo,
-                    g.nombre_grupo
-                FROM usuarios u
-                INNER JOIN grupos g ON u.id_grupo = g.id_grupo
-                WHERE u.id_usuarios = %s
-            """, (current_user.id,))
-            return cursor.fetchone()
-    finally:
-        conn.close()
+    usuario = Usuario.query.filter_by(id_usuario=current_user.id_usuario).join(Grupo).add_columns(
+        Usuario.id_usuario,
+        Usuario.nombre_usuario,
+        Usuario.apellido_usuario,
+        Usuario.dni_usuario,
+        Usuario.rol_usuario,
+        Grupo.id_grupo,
+        Grupo.num_grupo,
+        Grupo.nombre_grupo
+    ).first()
 
+    if usuario:
+        return {
+            "id_usuario": usuario.id_usuario,
+            "nombre_usuario": usuario.nombre_usuario,
+            "apellido_usuario": usuario.apellido_usuario,
+            "dni_usuario": usuario.dni_usuario,
+            "rol_usuario": usuario.rol_usuario,
+            "id_grupo": usuario.id_grupo,
+            "num_grupo": usuario.num_grupo,
+            "nombre_grupo": usuario.nombre_grupo
+        }
+
+    return None
