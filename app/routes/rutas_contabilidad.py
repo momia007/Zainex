@@ -83,9 +83,16 @@ def nvo_movimiento():
 
         if es_valido:
             try:
+                import os   """# Asegurarse de importar os que maneja tipos MIME (nombres de archivos y extensiones)"""
                 tipo_mime, _ = mimetypes.guess_type(archivo.filename)
                 es_pdf = tipo_mime == 'application/pdf'
                 opciones_upload = {'folder': 'comprobantes_zainex'}
+                # Forzar extensión .pdf en el nombre
+                nombre_base, ext = os.path.splitext(archivo.filename)
+                if ext.lower() != ".pdf":
+                    ext = ".pdf"
+                opciones_upload['public_id'] = f"comprobantes_zainex/{nombre_base}{ext}"
+                opciones_upload['format'] = "pdf"
                 if es_pdf:
                     opciones_upload['resource_type'] = 'raw'
                 resultado = cloudinary.uploader.upload(archivo, **opciones_upload)
