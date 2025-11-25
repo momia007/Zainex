@@ -83,7 +83,7 @@ def nvo_movimiento():
 
         if es_valido:
             try:
-                import os   """# Asegurarse de importar os que maneja tipos MIME (nombres de archivos y extensiones)"""
+                import os   # Asegurarse de importar os que maneja tipos MIME (nombres de archivos y extensiones)
                 tipo_mime, _ = mimetypes.guess_type(archivo.filename)
                 es_pdf = tipo_mime == 'application/pdf'
                 opciones_upload = {'folder': 'comprobantes_zainex'}
